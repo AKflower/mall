@@ -91,6 +91,39 @@ public class GalleriesController : ControllerBase
         return NoContent();
     }
 
+    [HttpPost("upload")]
+    public async Task<IActionResult> Upload(IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        using (var memoryStream = new MemoryStream())
+        {
+            await file.CopyToAsync(memoryStream);
+            var image = new Galleries
+            {
+                Name = file.FileName,
+                Data = memoryStream.ToArray()
+            };
+
+            _context.Galleries.Add(image);
+            await _context.SaveChangesAsync();
+        }
+
+        return Ok("File uploaded successfully.");
+    }
+
+    [HttpGet("download/{id}")]
+    public async Task<IActionResult> Download(int id)
+    {
+        var image = await _context.Galleries.FindAsync(id);
+
+        if (image == null)
+            return NotFound();
+
+        return File(image.Data, "image/jpeg", image.Name);
+    }
+
     private bool ImageExists(int id)
     {
         return _context.Galleries.Any(e => e.ImageId == id);
