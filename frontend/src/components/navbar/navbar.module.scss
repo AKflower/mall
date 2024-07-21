@@ -1,0 +1,18 @@
+.container{
+    display: flex;
+    justify-content: flex-end;
+    color: white;
+    background-color: black;
+    width: 100%;
+    opacity: .5;
+    padding: 2em 0;
+    gap: 1em;
+    position: fixed;
+    z-index: 1000;
+
+    .tab{
+        opacity: 1 !important;
+        margin-right: 1em;
+    }
+
+}

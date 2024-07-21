@@ -1,0 +1,28 @@
+.container{
+    background-image: url('../../assets/images/about.png');
+    background-size: cover;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    
+    gap:1em;
+    padding: 4em 1em;
+    .introduction{
+        h1{
+            color: #627D9A;
+        }
+        p {
+            max-width: 50em;
+        }
+    }
+    .establish{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        color: #627D9A;
+        h1{
+            font-size: 4em;
+            margin: 0;
+        }
+    }
+}
