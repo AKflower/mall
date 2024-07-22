@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using Npgsql;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -39,10 +40,30 @@ public class AdminsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Admins>> PostAdmin(Admins Admin)
     {
-        _context.Admins.Add(Admin);
-        await _context.SaveChangesAsync();
+         try
+        {
+            _context.Admins.Add(Admin);
+            await _context.SaveChangesAsync();
+            return Ok(Admin);
+        }
+        catch (DbUpdateException ex)
+        {
+            // Kiểm tra lỗi duplicate key
+            if (ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+            {
+                return Conflict(new { error = "Email đã tồn tại." });
+            }
 
-        return CreatedAtAction(nameof(GetAdmin), new { id = Admin.AdminId }, Admin);
+            // Xử lý các lỗi khác
+            return StatusCode(500, new { error = "Đã xảy ra lỗi trong quá trình xử lý yêu cầu." });
+        }
+        catch (Exception ex)
+        {
+            // Xử lý các lỗi không mong muốn khác
+            return StatusCode(500, new { error = "Đã xảy ra lỗi không mong muốn." });
+        }
+        
+
     }
 
     // PUT: api/Admins/5

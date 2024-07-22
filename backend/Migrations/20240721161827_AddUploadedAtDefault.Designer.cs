@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240721161827_AddUploadedAtDefault")]
+    partial class AddUploadedAtDefault
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +108,11 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -134,8 +141,9 @@ namespace backend.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("timestamp with time zone");
@@ -220,9 +228,6 @@ namespace backend.Migrations
                     b.Property<int>("MovieId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -290,6 +295,9 @@ namespace backend.Migrations
                     b.Property<DateTime>("BookingTime")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("CinemaHallId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SeatName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -297,7 +305,7 @@ namespace backend.Migrations
                     b.Property<int>("SeatNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ShowTimeId")
+                    b.Property<int>("ShowtimeId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("TotalPrice")

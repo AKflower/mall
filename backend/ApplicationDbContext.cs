@@ -29,6 +29,10 @@ public class ApplicationDbContext : DbContext
         
         modelBuilder.Entity<Galleries>()
             .HasKey(a => a.ImageId);
+            
+        modelBuilder.Entity<Galleries>()
+            .Property(g => g.UploadedAt)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
         modelBuilder.Entity<Movies>()
             .HasKey(a => a.MovieId);

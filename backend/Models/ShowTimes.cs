@@ -6,4 +6,6 @@ public class ShowTimes
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public int AvailableSeats { get; set; }
+    public decimal Price { get; set; }
+
 }

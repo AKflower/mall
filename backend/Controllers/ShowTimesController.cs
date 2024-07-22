@@ -39,6 +39,25 @@ public class ShowTimesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ShowTimes>> PostShowTime(ShowTimes ShowTime)
     {
+        var cinemaHall = await _context.CinemaHalls.FindAsync(ShowTime.CinemaHallId);
+
+        if (cinemaHall == null)
+        {
+            return NotFound("Không tìm thấy phòng chiếu.");
+        }
+
+        ShowTime.AvailableSeats = cinemaHall.TotalSeats;
+
+        var movie = await _context.Movies.FindAsync(ShowTime.MovieId);
+
+        if (movie == null)
+        {
+            return NotFound("Không tìm thấy phim.");
+        }
+
+        var ts = new TimeSpan(0, movie.Duration, 0);
+        ShowTime.EndTime = ShowTime.StartTime.Add(ts);
+
         _context.ShowTimes.Add(ShowTime);
         await _context.SaveChangesAsync();
 
@@ -89,6 +108,20 @@ public class ShowTimesController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+       // API to get showtimes by date: /api/ShowTimes/bydate?date=2024-07-22
+    [HttpGet("bydate")]
+    public async Task<ActionResult<IEnumerable<ShowTimes>>> GetShowTimesByDate(DateTime date)
+    {
+        var startDate = date.Date;
+        var endDate = startDate.AddDays(1);
+
+        var showTimes = await _context.ShowTimes
+            .Where(st => st.StartTime >= startDate && st.StartTime < endDate)
+            .ToListAsync();
+
+        return Ok(showTimes);
     }
 
     private bool ShowTimeExists(int id)
