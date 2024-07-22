@@ -5,6 +5,10 @@ public class Movies
     public string Description { get; set; }
     public int Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
-    public string ImageUrl { get; set; }
+    public int ImageId { get; set; }
 
+    public Movies()
+    {
+        ReleaseDate = DateTime.UtcNow;
+    }
 }

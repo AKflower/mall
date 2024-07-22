@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -89,6 +90,22 @@ public class ProductsController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    // GET: api/Products/stall/{stallId}
+    [HttpGet("stall/{stallId}")]
+    public async Task<ActionResult<IEnumerable<Products>>> GetProductsByStall(int stallId)
+    {
+        var products = await _context.Products
+            .Where(p => p.StallId == stallId)
+            .ToListAsync();
+
+        if (products == null || !products.Any())
+        {
+            return NotFound(new { message = "No products found for the given stall." });
+        }
+
+        return Ok(products);
     }
 
     private bool ProductExists(int id)

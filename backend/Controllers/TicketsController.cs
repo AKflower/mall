@@ -39,7 +39,30 @@ public class TicketsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Tickets>> PostTicket(Tickets Ticket)
     {
+        var showTime = await _context.ShowTimes.FindAsync(Ticket.ShowTimeId);
+
+        if (showTime == null)
+        {
+            return NotFound("Suất chiếu không tồn tại.");
+        }
+
+        if (showTime.AvailableSeats <= 0)
+        {
+            return BadRequest("Không còn ghế trống.");
+        }
+
+        int tens = Ticket.SeatNumber / 10;
+        int units = Ticket.SeatNumber % 10;
+        char tensChar = (char)('A' + (tens - 1)); 
+        string unitsStr;
+        if (units == 0) unitsStr = '1' + units.ToString();
+        else unitsStr = units.ToString();
+        Ticket.SeatName = tensChar.ToString() + unitsStr;
+        Ticket.BookingTime = DateTime.UtcNow;
         _context.Tickets.Add(Ticket);
+
+        showTime.AvailableSeats -= 1;
+
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetTicket), new { id = Ticket.TicketId }, Ticket);
@@ -96,7 +119,7 @@ public class TicketsController : ControllerBase
     public async Task<IActionResult> GetSeatNumbersByShowtime(int showtimeId)
     {
         var seatNumbers = await _context.Tickets
-            .Where(ticket => ticket.ShowtimeId == showtimeId)
+            .Where(ticket => ticket.ShowTimeId == showtimeId)
             .Select(ticket => ticket.SeatNumber)
             .ToListAsync();
 
