@@ -41,7 +41,7 @@ public class FeedBacksController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<FeedBacks>> PostFeedBack(FeedBacks FeedBack)
     {
-        
+        // if (FeedBack.Name == null) FeedBack.Name = "" + FeedBack.FeedBackId;
         _context.FeedBacks.Add(FeedBack);
         await _context.SaveChangesAsync();
 
