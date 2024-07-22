@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 using Npgsql;
+using BCrypt.Net;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -42,6 +43,7 @@ public class AdminsController : ControllerBase
     {
          try
         {
+            Admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(Admin.PasswordHash);
             _context.Admins.Add(Admin);
             await _context.SaveChangesAsync();
             return Ok(Admin);

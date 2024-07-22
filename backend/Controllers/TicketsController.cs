@@ -58,7 +58,6 @@ public class TicketsController : ControllerBase
         if (units == 0) unitsStr = '1' + units.ToString();
         else unitsStr = units.ToString();
         Ticket.SeatName = tensChar.ToString() + unitsStr;
-        Ticket.BookingTime = DateTime.UtcNow;
         _context.Tickets.Add(Ticket);
 
         showTime.AvailableSeats -= 1;
