@@ -9,8 +9,8 @@ import {useNavigate} from 'react-router-dom'
 
 
 
-const RatingComponent = ({data}) => {
-  const [feedback, setFeedback] = useState('');
+const RatingComponent = ({data,onChange}) => {
+
 const navigate = useNavigate()
 const starsData = [
     {
@@ -38,19 +38,19 @@ const starsData = [
     const [stars, setStars] = useState(starsData);
     
 
-  const handleFeedbackChange = (event) => {
-    setFeedback(event.target.value);
-  };
+  
 
   
   const handleRatingHover = (id) => {
-    console.log('test');
+   
     
     const updatedStars = stars.map((star, index) => ({
         ...star,
         isTick: index < id,
       }));
       setStars(updatedStars);
+      var starPoint = updatedStars.filter(star=> star.isTick).length;
+      onChange(starPoint)
     
   }
   const handleSkip = () => {

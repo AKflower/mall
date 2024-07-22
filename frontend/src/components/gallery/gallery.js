@@ -9,6 +9,7 @@ export default function Gallery () {
         <div className={styles.container}>
             <div className={styles.pic}>
                 <img src={clothes}/>
+               
             </div>
             <div className={styles.pic}>
                 <img src={food}/>
