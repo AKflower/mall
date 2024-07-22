@@ -5,13 +5,14 @@
     grid-template-columns: 2fr 1fr;
     
     gap:1em;
-    padding: 4em 1em;
+    padding: 10em 1em;
     .introduction{
         h1{
             color: #627D9A;
         }
         p {
             max-width: 50em;
+            font-size: 2em;
         }
     }
     .establish{
