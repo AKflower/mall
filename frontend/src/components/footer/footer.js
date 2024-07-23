@@ -13,9 +13,12 @@ export default function Footer() {
         console.log(e.target.value);
         setFeedback(e.target.value);
     }
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log(stars,feedback);
-        feedbackService.postFeedBack({Content: feedback,Rating:stars})
+        if (stars==0) return;
+        await feedbackService.postFeedBack({Content: feedback,Rating:stars});
+        setFeedback('');
+        
     }
     return (
         <div className={styles.container}>

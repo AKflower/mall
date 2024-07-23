@@ -6,7 +6,6 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -31,7 +30,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.RequireHttpsMetadata = false;
+    options.RequireHttpsMetadata = true; // Đặt thành true cho môi trường sản xuất
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
     {
@@ -48,17 +47,18 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
 
+// Chuyển hướng tất cả yêu cầu HTTP sang HTTPS
 app.UseHttpsRedirection();
 
 // Sử dụng chính sách CORS
 app.UseCors();
 
+app.UseAuthentication(); // Thêm dòng này để kích hoạt xác thực
 app.UseAuthorization();
 
 app.MapControllers();
