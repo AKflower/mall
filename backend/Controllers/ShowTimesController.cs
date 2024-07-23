@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -124,51 +125,64 @@ public class ShowTimesController : ControllerBase
         return Ok(showTimes);
     }
 
-    [HttpGet("by-date")]
-    public ActionResult<List<object>> GetShowTimesByDate(DateTime date, int cinemaHallId)
+    [HttpGet("by-date-and-stall")]
+public ActionResult<List<object>> GetMoviesAndShowTimesByDateAndStall(DateTime date, int stallId)
+{
+    try
     {
-        try
+        // Đặt startDate vào đầu ngày và chuyển đổi sang UTC
+        var startDate = date.Date.ToUniversalTime();
+        var endDate = startDate.AddDays(1);
+
+        // Lấy danh sách cinema halls theo stallId
+        var cinemaHalls = _context.CinemaHalls
+            .Where(ch => ch.StallId == stallId)
+            .Select(ch => ch.CinemaHallId)
+            .ToList();
+
+        // Lấy danh sách showtimes theo ngày và cinema halls
+        var showTimes = _context.ShowTimes
+            .Where(st => cinemaHalls.Contains(st.CinemaHallId) &&
+                         st.StartTime >= startDate &&
+                         st.StartTime < endDate)
+            .ToList();
+
+        // Lấy thông tin phim dựa trên MovieId từ ShowTimes
+        var movieIds = showTimes.Select(st => st.MovieId).Distinct().ToList();
+        var movies = _context.Movies
+            .Where(m => movieIds.Contains(m.MovieId))
+            .ToDictionary(m => m.MovieId, m => m);
+
+        // Tạo danh sách kết quả bao gồm thông tin phim và showtimes
+        var result = movies.Select(m => new
         {
-            // Lấy danh sách showtimes theo ngày và CinemaHallId
-            var startDate = date.Date;
-            var endDate = startDate.AddDays(1);
+            Movie = m.Value,
+            ShowTimes = showTimes
+                .Where(st => st.MovieId == m.Key)
+                .Select(st => new
+                {
+                    st.ShowTimeId,
+                    st.CinemaHallId,
+                    StartTime = st.StartTime.ToUniversalTime(),
+                    EndTime = st.EndTime.ToUniversalTime(),
+                    st.AvailableSeats,
+                    st.Price
+                }).ToList()
+        }).ToList();
 
-            var showTimes = _context.ShowTimes
-                .Where(st => st.CinemaHallId == cinemaHallId &&
-                             st.StartTime >= startDate &&
-                             st.StartTime < endDate)
-                .ToList();
-
-            // Lấy thông tin phim dựa trên MovieId từ ShowTimes
-            var movieIds = showTimes.Select(st => st.MovieId).Distinct().ToList();
-            var movies = _context.Movies
-                .Where(m => movieIds.Contains(m.MovieId))
-                .ToDictionary(m => m.MovieId, m => m);
-
-            // Tạo danh sách kết quả bao gồm thông tin phim và showtimes
-            var result = showTimes.Select(st => new
-            {
-                st.ShowTimeId,
-                st.CinemaHallId,
-                st.StartTime,
-                st.EndTime,
-                st.AvailableSeats,
-                st.Price,
-                Movie = movies[st.MovieId]
-            }).ToList();
-
-            if (result.Count == 0)
-            {
-                return NotFound("Không có lịch chiếu nào cho ngày và rạp này.");
-            }
-
-            return Ok(result);
-        }
-        catch (Exception ex)
+        if (result.Count == 0)
         {
-            return StatusCode(500, "Lỗi server nội bộ: " + ex.Message);
+            return NotFound("Không có lịch chiếu nào cho ngày và rạp này.");
         }
+
+        return Ok(result);
     }
+    catch (Exception ex)
+    {
+        return StatusCode(500, "Lỗi server nội bộ: " + ex.Message);
+    }
+}
+
 
     private bool ShowTimeExists(int id)
     {
