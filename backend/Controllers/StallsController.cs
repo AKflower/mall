@@ -21,20 +21,33 @@ public class StallsController : ControllerBase
         return await _context.Stalls.ToListAsync();
     }
 
-    // GET: api/Stalls/5
+     // GET: api/Stalls/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Stalls>> GetStall(int id)
+    public async Task<IActionResult> GetStall(int id)
     {
-        var Stall = await _context.Stalls.FindAsync(id);
+        var stall = await _context.Stalls
+            .Where(s => s.StallId == id)
+            .Select(s => new
+            {
+                StallId = s.StallId,
+                Name = s.Name,
+                Description = s.Description,
+                ContactInfo = s.ContactInfo,
+                Location = s.Location,
+                StallTypeId = s.StallTypeId,
+                Products = _context.Products
+                    .Where(p => p.StallId == s.StallId)
+                    .ToList()
+            })
+            .SingleOrDefaultAsync();
 
-        if (Stall == null)
+        if (stall == null)
         {
             return NotFound();
         }
 
-        return Stall;
+        return Ok(stall);
     }
-
     // POST: api/Stalls
     [HttpPost]
     public async Task<ActionResult<Stalls>> PostStall(Stalls Stall)

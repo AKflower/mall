@@ -6,6 +6,5 @@ public class Stalls
     public string ContactInfo { get; set; }
     public int Location { get; set; }
     public int StallTypeId { get; set; }
-    public int ImageId { get; set; }
 
 }
