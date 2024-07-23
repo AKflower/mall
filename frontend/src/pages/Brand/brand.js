@@ -6,13 +6,38 @@ import stallService from '../../services/stallsService'
 
 export default function Brand () {
     const [stalls, setStalls] = useState([]);
+    const [stallsBackup, setStallsBackup] = useState([]);
+    const [tabChoose,setTab] = useState(0);
     const [error, setError] = useState('');
 
+    const tabs = [
+        {
+            id: 0,
+            name: 'All'
+        },
+        {
+            id: 1,
+            name: 'Floor 1'
+        },
+        {
+            id: 2,
+            name: 'Floor 2'
+        },
+        {
+            id: 3,
+            name: 'Floor 3'
+        },
+        {
+            id: 4,
+            name: 'Floor 4'
+        },
+    ]
     useEffect(() => {
         const fetchStalls = async () => {
             try {
                 const data = await stallService.getStalls();
                 setStalls(data);
+                setStallsBackup(data)
             } catch (err) {
                 setError(err.message);
             }
@@ -20,27 +45,32 @@ export default function Brand () {
 
         fetchStalls();
     }, []);
+    const handleFilter = (id) =>  {
+    
+        var temp;
+        if  (id ==0) temp = stallsBackup;
+        else temp = stallsBackup.filter((item) => item.location == id);
+        console.log(temp);
+        setTab(id)
+        setStalls(temp)
+    }
     return (
         <div className={styles.container}>
         <Navbar />
         <h1 className={styles.title}>Brands</h1>
         <div className={styles.filter}>
-            <div className={styles.filterOption}><span>All</span></div>
-            <div className={styles.filterOption}><span>Floor 1</span></div>
-            <div className={styles.filterOption}><span>Floor 2</span></div>
-            <div className={styles.filterOption}><span>Floor 3</span></div>
-            <div className={styles.filterOption} style={{border:'none'}}><span>Floor 4</span></div>
+            {tabs.map((tab) => (
+                <div className={styles.filterOption} style={tab.id==tabs.length-1 ? {border:'none'}: {}} key={tab.id}><span onClick={() => handleFilter(tab.id)} style={tab.id == tabChoose ? {fontWeight:'600',color:'#3C6C7C'} : {}}>{tab.name}</span></div>
+            ))}
+            
+           
         </div>
         <div className={styles.brandlist}>
-            <BrandItem />
-            <BrandItem />
-            <BrandItem /> 
-            <BrandItem />
-            <BrandItem />
-            <BrandItem />
-            <BrandItem />
-            <BrandItem />
-            <BrandItem />
+        {stalls.map((stall) => (
+            <BrandItem name={stall.name} location={stall.location} key={stall.stallId} stallId={stall.stallId} imageId={stall.imageId}/>
+        ))}
+           
+           
         </div>
         </div>
     )
