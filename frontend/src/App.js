@@ -6,14 +6,21 @@ import Header from './components/header/header';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/login';
 import Brand from './pages/Brand/brand';
-
+import BrandDetail from './pages/BrandDetail/brandDetail';
+import Dashboard from './pages/Dashboard/dashboard';
+import Sidebar from './components/sidebar/sidebar';
 function App() {
   return (
+
     <BrowserRouter>
+    <Sidebar />
     <Routes>
     <Route path='/' element={<Home />} />
-    <Route path='/admin/login' element={<Login />} />
+    <Route path='/admin' element={<Login />} />
     <Route path='/brand' element={<Brand />} />
+    <Route path='/brandDetail' element={<BrandDetail />} />
+    <Route path='/admin/dashboard' element={<Dashboard />} />
+
     </Routes>
     </BrowserRouter>
   );

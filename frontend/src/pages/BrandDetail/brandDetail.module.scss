@@ -1,0 +1,33 @@
+.container{
+    padding: 2em;
+    .title{
+        margin: 3em 0 1em 0;
+        text-align: center;
+        
+    }
+    h2{
+        margin: 1em 0 0 0;
+        
+    }
+    .contact{
+        gap: .5em;
+        padding: 1em 0;
+        color: rgb(109, 108, 108);
+        display: flex;
+        align-items: center;
+    }
+    .content{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+      
+        .imgCover{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            img{
+                max-height: 15em;
+                border-radius: 10px;
+            }
+        }
+    }
+}
