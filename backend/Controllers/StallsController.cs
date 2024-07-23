@@ -16,9 +16,29 @@ public class StallsController : ControllerBase
 
     // GET: api/Stalls
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Stalls>>> GetStalls()
+    public async Task<ActionResult<IEnumerable<Stalls>>> GetStalls([FromQuery] int? stallTypeId = null)
     {
-        return await _context.Stalls.ToListAsync();
+        List<Stalls> stalls;
+
+        if (stallTypeId.HasValue)
+        {
+            // Lọc theo StallTypeId
+            stalls = await _context.Stalls
+                .Where(s => s.StallTypeId == stallTypeId.Value)
+                .ToListAsync();
+        }
+        else
+        {
+            // Trả về tất cả stalls
+            stalls = await _context.Stalls.ToListAsync();
+        }
+
+        if (stalls == null || stalls.Count == 0)
+        {
+            return NotFound("No stalls found.");
+        }
+
+        return Ok(stalls);
     }
 
      // GET: api/Stalls/5
