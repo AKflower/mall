@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Link, Routes, useLocation, useNavigate } from 're
 import Header from './components/header/header';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/login';
+import Brand from './pages/Brand/brand';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
     <Routes>
     <Route path='/' element={<Home />} />
     <Route path='/admin/login' element={<Login />} />
+    <Route path='/brand' element={<Brand />} />
     </Routes>
     </BrowserRouter>
   );

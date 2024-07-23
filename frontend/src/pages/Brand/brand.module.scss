@@ -1,0 +1,25 @@
+.container{
+    .title{
+        margin: 3em 0 1em 0;
+        text-align: center;
+    }
+    .filter{
+        display: flex;
+        justify-content: center;
+        padding: 1em 0;
+        .filterOption{
+            padding: 0 .5em;
+            border-right: 1px solid silver;
+            span{
+                cursor: pointer;
+            }
+         
+        }
+    }
+    .brandlist{
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap:1em;
+        padding: 0 1em;
+    }
+}
