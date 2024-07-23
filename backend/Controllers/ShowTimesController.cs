@@ -124,6 +124,52 @@ public class ShowTimesController : ControllerBase
         return Ok(showTimes);
     }
 
+    [HttpGet("by-date")]
+    public ActionResult<List<object>> GetShowTimesByDate(DateTime date, int cinemaHallId)
+    {
+        try
+        {
+            // Lấy danh sách showtimes theo ngày và CinemaHallId
+            var startDate = date.Date;
+            var endDate = startDate.AddDays(1);
+
+            var showTimes = _context.ShowTimes
+                .Where(st => st.CinemaHallId == cinemaHallId &&
+                             st.StartTime >= startDate &&
+                             st.StartTime < endDate)
+                .ToList();
+
+            // Lấy thông tin phim dựa trên MovieId từ ShowTimes
+            var movieIds = showTimes.Select(st => st.MovieId).Distinct().ToList();
+            var movies = _context.Movies
+                .Where(m => movieIds.Contains(m.MovieId))
+                .ToDictionary(m => m.MovieId, m => m);
+
+            // Tạo danh sách kết quả bao gồm thông tin phim và showtimes
+            var result = showTimes.Select(st => new
+            {
+                st.ShowTimeId,
+                st.CinemaHallId,
+                st.StartTime,
+                st.EndTime,
+                st.AvailableSeats,
+                st.Price,
+                Movie = movies[st.MovieId]
+            }).ToList();
+
+            if (result.Count == 0)
+            {
+                return NotFound("Không có lịch chiếu nào cho ngày và rạp này.");
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Lỗi server nội bộ: " + ex.Message);
+        }
+    }
+
     private bool ShowTimeExists(int id)
     {
         return _context.ShowTimes.Any(e => e.ShowTimeId == id);
