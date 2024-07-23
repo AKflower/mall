@@ -4,7 +4,7 @@ import Input from '../../components/input/input'
 import Button from '../../components/button/button'
 import { Link } from 'react-router-dom';
 import { useState ,useEffect} from 'react';
-
+import authService from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login () {
@@ -14,8 +14,8 @@ export default function Login () {
    
    
     const [formData, setFormData] = useState({
-        phone: '',
-        password: ''
+        Email: '',
+        Password: ''
       });
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,7 +28,12 @@ export default function Login () {
       const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-    
+        try {
+            const response = await authService.login(formData.Email,formData.Password);
+        }
+        catch(err) {
+
+        }
         // try {
         //   const response = await authService.login(formData.phone, formData.password);
         //   console.log('Login success:', response);
@@ -50,13 +55,14 @@ export default function Login () {
         //   setIsLoading(false);
         // }
       };
+      
     return (
         
         <div className={styles.container}>
             <h1>ABCD MALL</h1>
             <form>
-                    <Input label={'Số điện thoại'} name={'phone'} value={formData.phone} onChange={handleChange}/>
-                    <Input label={'Mật khẩu'} type={'password'} name={'password'} value={formData.password} onChange={handleChange}/>
+                    <Input label={'Số điện thoại'} name={'Email'} value={formData.Email} onChange={handleChange}/>
+                    <Input label={'Mật khẩu'} type={'password'} name={'Password'} value={formData.Password} onChange={handleChange}/>
                     <Button name={'Đăng nhập'} disabled={isLoading} onClick={handleSubmit}></Button>
                     <div className={styles.footerLogin}>
                         <Link to="/register">Đăng ký</Link>
