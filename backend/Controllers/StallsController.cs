@@ -35,6 +35,8 @@ public class StallsController : ControllerBase
                 ContactInfo = s.ContactInfo,
                 Location = s.Location,
                 StallTypeId = s.StallTypeId,
+                ImageId = s.ImageId,
+                isTopPick = s.isTopPick,
                 Products = _context.Products
                     .Where(p => p.StallId == s.StallId)
                     .ToList()
