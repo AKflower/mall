@@ -30,4 +30,27 @@
             }
         }
     }
+    .products{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        
+        .product{
+            .imgCover{
+                background-size: cover;
+                background-position: center;
+                width: 100%;
+                border: 1px solid silver;
+                border-radius: 1px;
+            }
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap:1em;
+            .content{
+                padding: 2em 1em;
+                display: flex;
+                flex-direction: column;
+                
+            }
+        }
+    }
 }
