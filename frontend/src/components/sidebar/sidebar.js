@@ -13,6 +13,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import ForumIcon from '@mui/icons-material/Forum';
+import CollectionsIcon from '@mui/icons-material/Collections';
 
 export default function Sidebar () {
     const role = localStorage.getItem('role')
@@ -45,6 +46,11 @@ export default function Sidebar () {
             <Link to='/admin/feedback'>
             <div className={styles.item} style={path.includes('/feedback') ? {backgroundColor: 'rgb(157 192 0)',color:'white'} : {}}>
                 <ForumIcon /><span>Feedback</span>
+            </div>
+        </Link>
+          <Link to='/admin/gallery'>
+            <div className={styles.item} style={path.includes('/gallery') ? {backgroundColor: 'rgb(157 192 0)',color:'white'} : {}}>
+                <CollectionsIcon /><span>Gallery</span>
             </div>
         </Link>
     

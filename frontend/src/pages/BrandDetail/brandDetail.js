@@ -30,6 +30,27 @@ export default function BrandDetail () {
         fetchStall();
         
     }, [])
+
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = new Date();
+
+        const getFormattedDate = (date) => {
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // Months are zero-based
+            const year = date.getFullYear();
+            const dayOfWeek = daysOfWeek[date.getDay()];
+            return `${dayOfWeek}, ${day}/${month}/${year}`;
+        };
+
+        const todayFormatted = getFormattedDate(today);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        const tomorrowFormatted = getFormattedDate(tomorrow);
+
+        const dayAfterTomorrow = new Date(today);
+        dayAfterTomorrow.setDate(today.getDate() + 2);
+        const dayAfterTomorrowFormatted = getFormattedDate(dayAfterTomorrow);
+    
     if (!stall) return; 
     return (
         <div className={styles.container}>
@@ -48,8 +69,8 @@ export default function BrandDetail () {
                     <img src={`http://localhost:5209/api/Galleries/download/${stall.imageId}`} width={'50%'}/>
                 </div>
             </div>
-            <h3>Product</h3>
-            <div className={styles.products}>
+           {stall.stallTypeId!=3 && <h3>Product</h3>}
+           {stall.stallTypeId!=3 && <div className={styles.products}>
                 {stall.products.map((product) => (
                     <div className={styles.product} key={product.productId}>
                         <div className={styles.imgCover} style={{backgroundImage: `url(http://localhost:5209/api/Galleries/download/${product.imageId})`}}></div>
@@ -61,6 +82,24 @@ export default function BrandDetail () {
                     
                 ))}
             </div> 
+            }
+            {stall.stallTypeId==3 && <h3>Movies</h3> }
+            {stall.stallTypeId==3 && 
+                <div className={styles.date}>
+                    <div className={styles.dateBox}>
+                    
+                    <p>{todayFormatted}</p>
+                </div>
+                <div className={styles.dateBox}>
+                    
+                    <p>{tomorrowFormatted}</p>
+                </div>
+                <div className={styles.dateBox}>
+                    
+                    <p>{dayAfterTomorrowFormatted}</p>
+                </div>
+                </div>
+            }
         </div>
     )
 }
