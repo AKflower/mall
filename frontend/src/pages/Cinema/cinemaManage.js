@@ -1,10 +1,9 @@
-import styles from './shop.module.scss'
+import styles from './cinemaManage.module.scss'
 import { useState, useEffect } from 'react';
 import stallService from '../../services/stallsService';
 import BrandItem from '../../components/brandItem/brandItem';
 
-
-export default function Shop () {
+export default function FoodStall () {
     const [stalls, setStalls] = useState([]);
     const [stallsBackup, setStallsBackup] = useState([]);
     const [tabChoose,setTab] = useState(0);
@@ -36,7 +35,7 @@ export default function Shop () {
         const fetchStalls = async () => {
             try {
                 var data = await stallService.getStalls();
-                data = data.filter((item) => item.stallTypeId == 1)
+                data = data.filter((item) => item.stallTypeId == 3)
                 setStalls(data);
                 setStallsBackup(data)
             } catch (err) {
@@ -57,7 +56,7 @@ export default function Shop () {
     }
     return (
         <div className='main'>
-            <h1>Shop</h1>
+            <h1>Cinema</h1>
             <div className={styles.filter}>
             {tabs.map((tab) => (
                 <div className={styles.filterOption} style={tab.id==tabs.length-1 ? {border:'none'}: {}} key={tab.id}><span onClick={() => handleFilter(tab.id)} style={tab.id == tabChoose ? {fontWeight:'600',color:'#3C6C7C'} : {}}>{tab.name}</span></div>

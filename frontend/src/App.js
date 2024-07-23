@@ -9,6 +9,11 @@ import Brand from './pages/Brand/brand';
 import BrandDetail from './pages/BrandDetail/brandDetail';
 import Dashboard from './pages/Dashboard/dashboard';
 import Sidebar from './components/sidebar/sidebar';
+import Shop from './pages/Shop/shop';
+import CinemaManage from './pages/Cinema/cinemaManage';
+import FoodStall from './pages/FoodStall/foodStall';
+import Feedback from './pages/Feedback/feedback';
+import Gallery from './pages/Gallery/gallery';
 function App() {
   return (
 
@@ -20,7 +25,11 @@ function App() {
     <Route path='/brand' element={<Brand />} />
     <Route path='/brandDetail' element={<BrandDetail />} />
     <Route path='/admin/dashboard' element={<Dashboard />} />
-
+    <Route path='/admin/shop' element={<Shop />} />
+    <Route path='/admin/food' element={<FoodStall />} />
+    <Route path='/admin/cinema' element={<CinemaManage />} />
+    <Route path='/admin/feedback' element={<Feedback />} />
+    <Route path='/admin/gallery' element={<Gallery />} />
     </Routes>
     </BrowserRouter>
   );

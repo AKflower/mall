@@ -53,4 +53,17 @@
             }
         }
     }
+    .date{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap:1em;
+        .dateBox{
+            padding: 1em;
+            border:1px solid silver;
+            background-color: rgb(251, 243, 243);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
 }
