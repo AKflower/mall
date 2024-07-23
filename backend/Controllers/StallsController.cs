@@ -104,6 +104,22 @@ public class StallsController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/Stalls/TopPicks
+    [HttpGet("TopPicks")]
+    public async Task<ActionResult<IEnumerable<Stalls>>> GetTopPickStalls()
+    {
+        var topPickStalls = await _context.Stalls
+            .Where(s => s.isTopPick == true)
+            .ToListAsync();
+
+        if (!topPickStalls.Any())
+        {
+            return NotFound("No top pick stalls found.");
+        }
+
+        return Ok(topPickStalls);
+    }
+
     private bool StallExists(int id)
     {
         return _context.Stalls.Any(e => e.StallId == id);
