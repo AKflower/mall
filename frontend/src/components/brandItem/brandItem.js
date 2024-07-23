@@ -15,7 +15,7 @@ export default function BrandItem ({name,location,stallId,imageId}) {
     }
     return(
         <div className={styles.container} onClick={() => handleGoToDetail()}>
-            <div className={styles.image} style={{backgroundImage:`url(${handleImage(imageId)})`}}></div>
+            <div className={styles.image} style={{backgroundImage:`url(http://localhost:5209/api/Galleries/download/${imageId})`}}></div>
             <div className={styles.content}>
                 <h1>{name}</h1>
                 <p>Floor {location}</p>

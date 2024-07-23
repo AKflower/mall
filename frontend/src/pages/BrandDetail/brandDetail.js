@@ -49,6 +49,18 @@ export default function BrandDetail () {
                 </div>
             </div>
             <h3>Product</h3>
+            <div className={styles.products}>
+                {stall.products.map((product) => (
+                    <div className={styles.product} key={product.productId}>
+                        <div className={styles.imgCover} style={{backgroundImage: `url(http://localhost:5209/api/Galleries/download/${product.imageId})`}}></div>
+                        <div className={styles.content}>
+                            <h5>{product.name}</h5>
+                            <p>{product.description}</p>
+                        </div> 
+                    </div>
+                    
+                ))}
+            </div> 
         </div>
     )
 }
