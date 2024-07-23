@@ -61,7 +61,7 @@ export default function Login () {
         <div className={styles.container}>
             <h1>ABCD MALL</h1>
             <form>
-                    <Input label={'Số điện thoại'} name={'Email'} value={formData.Email} onChange={handleChange}/>
+                    <Input label={'Email'} name={'Email'} value={formData.Email} onChange={handleChange}/>
                     <Input label={'Mật khẩu'} type={'password'} name={'Password'} value={formData.Password} onChange={handleChange}/>
                     <Button name={'Đăng nhập'} disabled={isLoading} onClick={handleSubmit}></Button>
                     <div className={styles.footerLogin}>
