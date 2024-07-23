@@ -44,13 +44,21 @@ const deleteStall = async (id) => {
         throw new Error(`Failed to delete stall with id ${id}.`);
     }
 };
-
+const getTopPickStalls = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/TopPicks`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch top pick stalls.');
+    }
+};
 const stallService = {
     getStalls,
     getStall,
     createStall,
     updateStall,
     deleteStall,
+    getTopPickStalls
 };
 
 export default stallService;
