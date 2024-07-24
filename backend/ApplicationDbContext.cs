@@ -15,6 +15,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Stalls> Stalls { get; set; }
     public DbSet<StallTypes> StallTypes { get; set; }
     public DbSet<Tickets> Tickets { get; set; }
+    public DbSet<Floors> Floors { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +55,9 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Tickets>()
             .HasKey(a => a.TicketId);
+
+        modelBuilder.Entity<Floors>()
+            .HasKey(a => a.FloorId);
     //     modelBuilder.Entity<FoodItem>()
     //         .HasOne(f => f.Stall)
     //         .WithMany()
