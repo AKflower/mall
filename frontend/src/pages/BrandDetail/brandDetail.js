@@ -8,6 +8,7 @@ import showTimeService from '../../services/showTimeService'
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 
 export default function BrandDetail () {
+    const navigate = useNavigate()
     const [stall,setStall] = useState(null)
     const useQuery = () => {
         return new URLSearchParams(location.search);
@@ -133,7 +134,7 @@ export default function BrandDetail () {
                         <p>{showTime.movie.description}</p>
                         <div className={styles.showTimes}>
                         {showTime.showTimes.map((item) => (
-                            <div className={styles.showTime}>{formatTime(item.startTime)}</div>
+                            <div className={styles.showTime} onClick={()=> navigate(`/booking?id=${item.showTimeId}`)}>{formatTime(item.startTime)}</div>
                         ))}
                         </div>
                         

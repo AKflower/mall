@@ -164,10 +164,7 @@ public class TicketsController : ControllerBase
             .Select(ticket => ticket.SeatNumber)
             .ToListAsync();
 
-        if (seatNumbers == null || !seatNumbers.Any())
-        {
-            return NotFound("No seats found for the given showtime.");
-        }
+       
 
         return Ok(seatNumbers);
     }
