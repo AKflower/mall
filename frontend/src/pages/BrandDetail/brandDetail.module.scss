@@ -66,4 +66,40 @@
             cursor: pointer;
         }
     }
+    .movies {
+        padding: 1em 0;
+        display: flex;
+        gap:1em;
+        flex-direction: column;
+        .movie {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap:1em;
+            
+            .img{
+                width: 100%;
+                height: 40em;
+                background-size: cover;
+                background-position: center;
+            }
+            .content{
+                display: flex;
+                flex-direction: column;
+                .showTimes{
+                    display: flex;
+                    flex-direction: row;
+                    gap:1em;
+                    .showTime{
+                        background-color: silver;
+                        padding: .5em 1em;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        &:hover{
+                            background-color: yellow;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

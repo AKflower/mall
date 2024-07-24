@@ -4,17 +4,41 @@ import {useNavigate,useLocation } from 'react-router-dom'
 import {useEffect, useState} from 'react'
 import stallService from '../../services/stallsService'
 import PhoneIcon from '@mui/icons-material/Phone';
+import showTimeService from '../../services/showTimeService'
+import EventSeatIcon from '@mui/icons-material/EventSeat';
 
 export default function BrandDetail () {
     const [stall,setStall] = useState(null)
     const useQuery = () => {
         return new URLSearchParams(location.search);
     };
+    const formatTime = (dateString) => {
+        const date = new Date(dateString);
+        const hours = date.getUTCHours().toString().padStart(2, '0');
+        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+      };
     const location = useLocation();
     const query = useQuery();
     const id = query.get('id');
+    const [showTimes, setShowTimes] = useState([]);
+    const [error, setError] = useState(null);
+
+   
    
     useEffect( ()=> {
+        const fetchShowTimes = async () => {
+            try {
+                const date = new Date().toISOString().split('T')[0]; // Lấy ngày hiện tại
+                const stallId = id; // Thay đổi stallId theo nhu cầu của bạn
+                const data = await showTimeService.getMoviesAndShowTimesByDateAndStall(date, stallId);
+                setShowTimes(data);
+            } catch (err) {
+                setError(err.message);
+            }
+        };
+
+        fetchShowTimes();
         const fetchStall =  async () => {
             try {
                 const data = await stallService.getStall(id);
@@ -100,6 +124,23 @@ export default function BrandDetail () {
                 </div>
                 </div>
             }
+            {stall.stallTypeId==3 && <div className={styles.movies}>
+             {showTimes.map((showTime) => (
+                <div className={styles.movie}>
+                    <div className={styles.img} style={{backgroundImage: `url(http://localhost:5209/api/Galleries/download/${showTime.movie.imageId})`}}></div>
+                    <div className={styles.content}>
+                        <h1>{showTime.movie.title}</h1>
+                        <p>{showTime.movie.description}</p>
+                        <div className={styles.showTimes}>
+                        {showTime.showTimes.map((item) => (
+                            <div className={styles.showTime}>{formatTime(item.startTime)}</div>
+                        ))}
+                        </div>
+                        
+                    </div>
+                </div>
+             ))}
+            </div>}
         </div>
     )
 }
