@@ -24,17 +24,49 @@ public class ShowTimesController : ControllerBase
 
     // GET: api/ShowTimes/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<ShowTimes>> GetShowTime(int id)
+    public async Task<ActionResult> GetShowTime(int id)
     {
-        var ShowTime = await _context.ShowTimes.FindAsync(id);
+        // Tìm showtime dựa trên ID
+        var showTime = await _context.ShowTimes.FindAsync(id);
 
-        if (ShowTime == null)
+        if (showTime == null)
         {
-            return NotFound();
+            return NotFound("Không tìm thấy suất chiếu.");
         }
 
-        return ShowTime;
+        // Tìm cinema hall dựa trên CinemaHallId
+        var cinemaHall = await _context.CinemaHalls.FindAsync(showTime.CinemaHallId);
+
+        if (cinemaHall == null)
+        {
+            return NotFound("Không tìm thấy phòng chiếu.");
+        }
+
+        // Tìm stall dựa trên StallId từ cinema hall
+        var stall = await _context.Stalls.FindAsync(cinemaHall.StallId);
+
+        if (stall == null)
+        {
+            return NotFound("Không tìm thấy quầy chiếu.");
+        }
+
+        // Trả về thông tin showtime cùng với StallId và StallName
+        var result = new
+        {
+            ShowTimeId = showTime.ShowTimeId,
+            MovieId = showTime.MovieId,
+            CinemaHallId = showTime.CinemaHallId,
+            StartTime = showTime.StartTime,
+            EndTime = showTime.EndTime,
+            AvailableSeats = showTime.AvailableSeats,
+            Price = showTime.Price,
+            StallId = stall.StallId,
+            StallName = stall.Name
+        };
+
+        return Ok(result);
     }
+
 
     // POST: api/ShowTimes
     [HttpPost]

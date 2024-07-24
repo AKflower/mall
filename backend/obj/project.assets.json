@@ -3287,25 +3287,26 @@
     ]
   },
   "packageFolders": {
-    "/Users/kflower/.nuget/packages/": {}
+    "C:\\Users\\tranq\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/kflower/Documents/GitHub/mall/backend/backend.csproj",
+      "projectUniqueName": "D:\\Workspace\\c#\\mall\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "/Users/kflower/Documents/GitHub/mall/backend/backend.csproj",
-      "packagesPath": "/Users/kflower/.nuget/packages/",
-      "outputPath": "/Users/kflower/Documents/GitHub/mall/backend/obj/",
+      "projectPath": "D:\\Workspace\\c#\\mall\\backend\\backend.csproj",
+      "packagesPath": "C:\\Users\\tranq\\.nuget\\packages\\",
+      "outputPath": "D:\\Workspace\\c#\\mall\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/kflower/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\tranq\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3383,7 +3384,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
