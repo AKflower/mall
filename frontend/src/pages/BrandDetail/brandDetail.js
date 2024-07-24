@@ -130,6 +130,7 @@ export default function BrandDetail() {
                                 {showTime.showTimes.map((item) => (
                                     <div className={styles.showTime} key={item.showTimeId} onClick={() => navigate(`/booking?id=${item.showTimeId}`)}>{formatTime(item.startTime)}</div>
                                 ))}
+                                {showTime.length == 0 && <h2>There are no showtimes yet!</h2>}
                             </div>
 
                         </div>

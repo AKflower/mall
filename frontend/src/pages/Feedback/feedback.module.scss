@@ -1,0 +1,10 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 0 1em 0 0;
+    align-items: center;
+    .btnContainer{
+        min-width: 10em;
+    }
+}

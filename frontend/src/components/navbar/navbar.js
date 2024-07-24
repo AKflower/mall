@@ -8,7 +8,7 @@ export default function Navbar() {
         <div className={styles.container} style={{opacity: path!='/' ? 1 : .5}}> 
             <Link to={'/'}><div className={path=='/' ? styles.tabActive : styles.tab}>Trang chủ</div></Link>
             <Link to={'/'}><div className={styles.tab}>Giới thiệu</div></Link>
-            <Link to={'/brand'}><div className={path.includes('/brand') ? styles.tabActive : styles.tab}>Thương hiệu</div></Link>
+            <Link to={'/brand'}><div className={path.includes('/brand') || path.includes('/booking') ? styles.tabActive : styles.tab}>Thương hiệu</div></Link>
         </div>
     )
 }

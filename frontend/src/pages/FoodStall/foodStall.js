@@ -2,6 +2,7 @@ import styles from './foodStall.module.scss'
 import { useState, useEffect } from 'react';
 import stallService from '../../services/stallsService';
 import BrandItem from '../../components/brandItem/brandItem';
+import Button from '../../components/button/button';
 
 export default function FoodStall () {
     const [stalls, setStalls] = useState([]);
@@ -56,7 +57,10 @@ export default function FoodStall () {
     }
     return (
         <div className='main'>
-            <h1>Food Stall</h1>
+            <div className={styles.header}>
+                <h1>Food Stalls</h1>
+                <div className={styles.btnContainer}><Button name={'New'} color='green'/></div>
+            </div>
             <div className={styles.filter}>
             {tabs.map((tab) => (
                 <div className={styles.filterOption} style={tab.id==tabs.length-1 ? {border:'none'}: {}} key={tab.id}><span onClick={() => handleFilter(tab.id)} style={tab.id == tabChoose ? {fontWeight:'600',color:'#3C6C7C'} : {}}>{tab.name}</span></div>
