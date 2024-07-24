@@ -29,6 +29,15 @@ const createTicket = async (ticket) => {
     }
 };
 
+const createTicketsBulk = async (tickets) => {
+    try {
+        const response = await axios.post(`${API_URL}/bulk-create`, tickets);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to create tickets in bulk.');
+    }
+};
+
 const updateTicket = async (id, ticket) => {
     try {
         await axios.put(`${API_URL}/${id}`, ticket);
@@ -58,6 +67,7 @@ const ticketsService = {
     getTickets,
     getTicket,
     createTicket,
+    createTicketsBulk,
     updateTicket,
     deleteTicket,
     getSeatNumbersByShowtime,
