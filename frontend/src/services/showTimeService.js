@@ -67,6 +67,17 @@ const getShowTimesByDateAndCinemaHall = async (date, cinemaHallId) => {
     }
 };
 
+const getMoviesAndShowTimesByDateAndStall = async (date, stallId) => {
+    try {
+        const response = await axios.get(`${API_URL}/by-date-and-stall`, {
+            params: { date, stallId }
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch movies and showtimes by date and stall.');
+    }
+};
+
 const showTimeService = {
     getShowTimes,
     getShowTime,
@@ -75,6 +86,7 @@ const showTimeService = {
     deleteShowTime,
     getShowTimesByDate,
     getShowTimesByDateAndCinemaHall,
+    getMoviesAndShowTimesByDateAndStall,
 };
 
 export default showTimeService;
