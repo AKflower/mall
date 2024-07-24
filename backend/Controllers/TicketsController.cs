@@ -53,10 +53,18 @@ public class TicketsController : ControllerBase
 
         int tens = Ticket.SeatNumber / 10;
         int units = Ticket.SeatNumber % 10;
-        char tensChar = (char)('A' + (tens - 1)); 
+        char tensChar;
         string unitsStr;
-        if (units == 0) unitsStr = '1' + units.ToString();
-        else unitsStr = units.ToString();
+        if (units == 0)
+        {
+            tensChar = (char)('A' + (tens - 1));
+            unitsStr = '1' + units.ToString();
+        }
+        else
+        {
+            tensChar = (char)('A' + tens);
+            unitsStr = units.ToString();
+        }
         Ticket.SeatName = tensChar.ToString() + unitsStr;
         _context.Tickets.Add(Ticket);
 
@@ -66,6 +74,40 @@ public class TicketsController : ControllerBase
 
         return CreatedAtAction(nameof(GetTicket), new { id = Ticket.TicketId }, Ticket);
     }
+
+    [HttpPost("bulk-create")]
+    public async Task<IActionResult> CreateTickets([FromBody] List<Tickets> tickets)
+    {
+        if (tickets == null || !tickets.Any())
+        {
+            return BadRequest("No tickets to create.");
+        }
+
+        foreach (var ticket in tickets)
+        {
+            int tens = ticket.SeatNumber / 10;
+            int units = ticket.SeatNumber % 10;
+            char tensChar;
+            string unitsStr;
+            if (units == 0)
+            {
+                tensChar = (char)('A' + (tens - 1));
+                unitsStr = '1' + units.ToString();
+            }
+            else
+            {
+                tensChar = (char)('A' + tens);
+                unitsStr = units.ToString();
+            }
+            ticket.SeatName = tensChar.ToString() + unitsStr;
+        }
+
+        await _context.Tickets.AddRangeAsync(tickets);
+        await _context.SaveChangesAsync();
+
+        return Ok(tickets); // Return list of created ticket IDs
+    }
+
 
     // PUT: api/Tickets/5
     [HttpPut("{id}")]
@@ -113,7 +155,7 @@ public class TicketsController : ControllerBase
         return NoContent();
     }
 
-     // GET: api/tickets/showtime/{showtimeId}/seats
+    // GET: api/tickets/showtime/{showtimeId}/seats
     [HttpGet("showtime/{showtimeId}/seats")]
     public async Task<IActionResult> GetSeatNumbersByShowtime(int showtimeId)
     {

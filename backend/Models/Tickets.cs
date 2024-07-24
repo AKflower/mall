@@ -8,6 +8,6 @@ public class Tickets
     public decimal TotalPrice { get; set; }
      public Tickets()
     {
-        BookingTime = DateTime.UtcNow;
+        BookingTime = DateTime.UtcNow.AddHours(7);
     }
 }
