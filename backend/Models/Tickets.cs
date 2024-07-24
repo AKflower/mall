@@ -4,7 +4,11 @@ public class Tickets
     public int ShowTimeId { get; set; }
     public DateTime BookingTime { get; set; }
     public int SeatNumber { get; set; }
+    public string Credit { get; set; }
+    public string? Name { get; set; }
+    public string? Mail { get; set; }
     public string? SeatName { get; set; }
+    public string? Phone { get; set; }
     public decimal TotalPrice { get; set; }
      public Tickets()
     {
