@@ -56,6 +56,7 @@ public class ShowTimesController : ControllerBase
             ShowTimeId = showTime.ShowTimeId,
             MovieId = showTime.MovieId,
             CinemaHallId = showTime.CinemaHallId,
+            CinemaHallName = cinemaHall.Name,
             StartTime = showTime.StartTime,
             EndTime = showTime.EndTime,
             AvailableSeats = showTime.AvailableSeats,
@@ -202,11 +203,6 @@ public class ShowTimesController : ControllerBase
                         st.Price
                     }).ToList()
             }).ToList();
-
-            if (result.Count == 0)
-            {
-                return NotFound("Không có lịch chiếu nào cho ngày và rạp này.");
-            }
 
             return Ok(result);
         }
