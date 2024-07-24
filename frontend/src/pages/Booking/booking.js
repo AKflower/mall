@@ -13,6 +13,7 @@ import Input from '../../components/input/input';
 Modal.setAppElement('#root'); // Đây là phần tử chứa ứng dụng của bạn, thường là id của root
 
 export default function Booking() {
+    const navigate = useNavigate()
     const [showTime, setShowTime] = useState(null);
     const [error, setError] = useState('');
     const [seatsBooked, setSeatsBooked] = useState([]);
@@ -58,33 +59,33 @@ export default function Booking() {
         const minutes = String(date.getUTCMinutes()).padStart(2, '0');
         return `${hours}:${minutes}`;
     };
-
-    useEffect(() => {
-        const fetchShowTime = async () => {
+    const fetchShowTime = async () => {
+        try {
+            const data = await showTimeService.getShowTime(id);
+            setShowTime(data);
+            const movie = await moviesService.getMovie(data.movieId);
+            setMovie(movie);
             try {
-                const data = await showTimeService.getShowTime(id);
-                setShowTime(data);
-                const movie = await moviesService.getMovie(data.movieId);
-                setMovie(movie);
-                try {
-                    const seatsBooked = await ticketsService.getSeatNumbersByShowtime(id);
-                    setSeatsBooked(seatsBooked);
-                    var seatsTemp = [];
-                    for (let i = 0; i < data.availableSeats; i++) {
-                        var row = Math.floor(i / 10) + 1;
-                        var col = i % 10 + 1;
-                        var name = getLetterFromNumber(row) + '' + col;
-                        var status = seatsBooked.includes(i + 1) ? 1 : 0;
-                        seatsTemp.push({ row, col, name, status });
-                    }
-                    setSeats(seatsTemp);
-                } catch (err) {
-                    setError(err.message);
+                const seatsBooked = await ticketsService.getSeatNumbersByShowtime(id);
+                setSeatsBooked(seatsBooked);
+                var seatsTemp = [];
+                for (let i = 0; i < data.availableSeats; i++) {
+                    var row = Math.floor(i / 10) + 1;
+                    var col = i % 10 + 1;
+                    var name = getLetterFromNumber(row) + '' + col;
+                    var status = seatsBooked.includes(i + 1) ? 1 : 0;
+                    seatsTemp.push({ row, col, name, status });
                 }
+                setSeats(seatsTemp);
             } catch (err) {
                 setError(err.message);
             }
-        };
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+    useEffect(() => {
+       
         fetchShowTime();
     }, []);
 
@@ -115,7 +116,7 @@ export default function Booking() {
     const handlePayment = async () => {
         
             
-    
+            if (formData.credit=='') return;
             const tickets = seatsBooking.map(seat => ({
                 SeatNumber: seat.row * 10 + seat.col,
                 ShowTimeId: showTime.showTimeId,
@@ -124,12 +125,16 @@ export default function Booking() {
                 Name: formData.name,
                 Mail: formData.email,
                 Phone: formData.phone,
+                
                 // Các thuộc tính khác nếu cần
             }));
+           
     
             try {
                 await ticketsService.createTicketsBulk(tickets);
-                alert('Tickets booked successfully!');
+                fetchShowTime();
+                closeModal();
+                setSeatsBooking([])
                 // Điều hướng hoặc các hành động khác sau khi đặt vé thành công
             } catch (error) {
                 alert('Failed to book tickets: ' + error.message);
