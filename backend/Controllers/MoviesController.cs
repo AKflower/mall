@@ -18,7 +18,19 @@ public class MoviesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Movies>>> GetMovies()
     {
-        return await _context.Movies.ToListAsync();
+        try
+        {
+           
+            var movies = await _context.Movies
+                .Where(movie => !movie.IsDelete) 
+                .ToListAsync();
+
+            return Ok(movies);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Lỗi máy chủ: {ex.Message}");
+        }
     }
 
     // GET: api/Movies/5
@@ -101,7 +113,7 @@ public class MoviesController : ControllerBase
                 .Where(movie => movie.StallId == stallId)
                 .ToListAsync();
 
-          
+
             return Ok(movies);
         }
         catch (Exception ex)
