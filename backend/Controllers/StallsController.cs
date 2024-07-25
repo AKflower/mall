@@ -53,6 +53,7 @@ public class StallsController : ControllerBase
                 Name = s.Name,
                 Description = s.Description,
                 ContactInfo = s.ContactInfo,
+                FloorId = s.FloorId,
                 Parking = s.Parking,
                 StallTypeId = s.StallTypeId,
                 ImageId = s.ImageId,
