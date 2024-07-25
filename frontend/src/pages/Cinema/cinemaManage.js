@@ -104,7 +104,7 @@ export default function CinemaManage() {
     const handleFilter = (id) => {
         let temp;
         if (id == 0) temp = stallsBackup;
-        else temp = stallsBackup.filter((item) => item.location == id);
+        else temp = stallsBackup.filter((item) => item.floorId == id);
         setTab(id);
         setStalls(temp);
     };

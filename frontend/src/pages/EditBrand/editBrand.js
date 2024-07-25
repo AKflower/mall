@@ -64,6 +64,7 @@ export default function EditBrand() {
         try {
             const data = await stallService.getStall(id);
             setStallUpdate(data);
+            console.log(data);
             var descriptionArray = data.description.split('//');
             data.descriptionUpdate = data.description;
             data.description = descriptionArray;
@@ -148,6 +149,7 @@ export default function EditBrand() {
 
     const handleUpdate = async () => {
         try {
+            console.log(stallUpDate);
             stallUpDate.description = stallUpDate.descriptionUpdate;
             const res = await stallService.updateStall(id, stallUpDate);
             fetchStall();
@@ -274,7 +276,7 @@ export default function EditBrand() {
                 <Input label="Description" value={stallUpDate.descriptionUpdate} onChange={(e) => setStallUpdate({ ...stallUpDate, descriptionUpdate: e.target.value })} isTextArea />
                 <div className={styles.btnContainer}>
                     <Button name={'Cancel'} onClick={handleCloseModal} color='red' />
-                    <Button name="Save" onClick={() => handleUpdate} />
+                    <Button name="Save" onClick={handleUpdate} />
                 </div>
             </Modal>
             {/* Modal for editing product */}

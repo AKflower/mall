@@ -49,7 +49,7 @@ export default function Brand () {
     
         var temp;
         if  (id ==0) temp = stallsBackup;
-        else temp = stallsBackup.filter((item) => item.location == id);
+        else temp = stallsBackup.filter((item) => item.floorId == id);
         console.log(temp);
         setTab(id)
         setStalls(temp)
