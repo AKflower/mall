@@ -209,10 +209,34 @@
         display: grid;
         grid-template-columns: repeat(2,1fr);
         gap:1em;
-        .poster{
-       
-            height: 20em;
-            background-size: cover;
+        .posterCover {
+            position: relative;
+            &:hover .createShowTime{
+                display: flex;
+            }
+            .createShowTime{
+                position: absolute;
+                z-index: 1;
+                width: 80%;
+                top:0;
+                
+                background-color: #000;
+                width: 100%;
+                height: 100%;
+                opacity: .8;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                div{
+                    width: 8em;
+                }
+            }
+            .poster{
+                
+                height: 20em;
+                background-size: cover;
+            }
         }
+        
     }
 }

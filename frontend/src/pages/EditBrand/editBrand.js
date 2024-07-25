@@ -237,15 +237,21 @@ export default function EditBrand() {
             
             { movies.map((movie) => (
                 <div className={styles.movie}>
-                    <div className={styles.posterCover}><div className={styles.poster} style={{ backgroundImage: `url(http://localhost:5209/api/Galleries/download/${movie.imageId})` }}></div></div>
+                    <div className={styles.posterCover}>
+                    <div className={styles.poster} style={{ backgroundImage: `url(http://localhost:5209/api/Galleries/download/${movie.imageId})` }}></div>
+                    <div className={styles.createShowTime}> <Button name="Create showtime" color='#ff6710'/></div>
+                    </div>
                     <div className={styles.infor}>
                         <h3>{movie.title}</h3>
                         <Ptitle title={'Duration'} content={movie.duration + ' minutes'}/>
                         <div className={styles.btnContainer} style={{float:'left'}}>
                             <Button name={'Delete'} onClick={() => handleDeleteMovie(movie)} color='red' />
                             <Button name="Edit" onClick={() => handleOpenEditMovieModal(movie)} />
+                            
                         </div>
+                        
                     </div>
+                   
                 </div>
             ))}
 
