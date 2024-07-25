@@ -4,11 +4,35 @@ import Modal from 'react-modal';
 import stallService from '../../services/stallsService';
 import BrandItem from '../../components/brandItem/brandItem';
 import Button from '../../components/button/button';
-
+import Input from '../../components/input/input';
+import Select2 from '../../components/select/select2';
+import galleryService from '../../services/galleriesService';
 // Đặt gốc cho Modal
 Modal.setAppElement('#root');
 
 export default function CinemaManage() {
+    const [formData, setFormData] = useState({
+        location: '',
+        name: '',
+        file: null,
+        
+    });
+    const handleChange = (e) => {
+        
+        const { name, value } = e.target;
+        if (name=='file') {
+            console.log( e.target.files[0])
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]:  e.target.files
+            }));
+           return;
+        }
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
     const [stalls, setStalls] = useState([]);
     const [stallsBackup, setStallsBackup] = useState([]);
     const [tabChoose, setTab] = useState(0);
@@ -46,13 +70,19 @@ export default function CinemaManage() {
         setStalls(temp);
     };
 
-    const handleModalSubmit = (event) => {
-        event.preventDefault();
-        const { name, location } = event.target.elements;
-        // Gửi yêu cầu tạo cinema mới với dữ liệu từ form
-        // Đóng modal sau khi hoàn thành
-        setShowModal(false);
-    };
+    const handleModalSubmit = async () => {
+        if (formData.file) {
+            try {
+                // Tải lên ảnh
+                const uploadedImage = await galleryService.uploadImage(formData.file[0]);
+                // stallService.createStall()
+            }
+            catch (err) {
+                console.error(err)
+            }
+        }
+    }
+    
 
     return (
         <div className='main'>
@@ -97,20 +127,15 @@ export default function CinemaManage() {
                 overlayClassName={styles.modal}
             >
                 <h2>New Cinema</h2>
-                <form onSubmit={handleModalSubmit}>
-                    <div>
-                        <label>Name:</label>
-                        <input type="text" name="name" required />
+                
+                <Input label={'Name'} type={'text'} name={'name'} value={formData.name} onChange={handleChange} />
+                <Input label={'Image'} type='file' name={'file'}  onChange={handleChange}/>
+                    <div className={styles.btnContainer}>
+                        
+                        <Button name={'Cancel'} onClick={() => setShowModal(false)} color='red'/>
+                        <Button name={'Submit'} onClick={() => handleModalSubmit()}/>
                     </div>
-                    <div>
-                        <label>Location:</label>
-                        <input type="number" name="location" required />
-                    </div>
-                    <div>
-                        <button type="submit">Create</button>
-                        <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
-                    </div>
-                </form>
+               
             </Modal>
         </div>
     );
