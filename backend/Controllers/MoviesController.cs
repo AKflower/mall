@@ -38,13 +38,9 @@ public class MoviesController : ControllerBase
     public async Task<ActionResult<Movies>> GetMovie(int id)
     {
         var Movie = await _context.Movies.FindAsync(id);
+        if (!Movie.IsDelete) return Movie;
+        return Ok(new {});
 
-        if (Movie == null)
-        {
-            return NotFound();
-        }
-
-        return Movie;
     }
 
     // POST: api/Movies
@@ -110,7 +106,7 @@ public class MoviesController : ControllerBase
         try
         {
             var movies = await _context.Movies
-                .Where(movie => movie.StallId == stallId)
+                .Where(movie => movie.StallId == stallId && !movie.IsDelete)
                 .ToListAsync();
 
 
