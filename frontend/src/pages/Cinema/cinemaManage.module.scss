@@ -38,6 +38,7 @@
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
         z-index: 1000;
+        
         div {
             margin: 0 0 1em 0;
         }
@@ -49,6 +50,8 @@
         border-radius: 5px;
         width: 500px;
         max-width: 100%;
+        max-height: 45em;
+        overflow: auto;
     }
     .btnContainer{
         display: flex;

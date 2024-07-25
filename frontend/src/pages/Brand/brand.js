@@ -67,7 +67,7 @@ export default function Brand () {
         </div>
         <div className={styles.brandlist}>
         {stalls.map((stall) => (
-            <BrandItem name={stall.name} location={stall.location} key={stall.stallId} stallId={stall.stallId} imageId={stall.imageId}/>
+            <BrandItem name={stall.name} parking={stall.parking} key={stall.stallId} stallId={stall.stallId} imageId={stall.imageId}/>
         ))}
            
            

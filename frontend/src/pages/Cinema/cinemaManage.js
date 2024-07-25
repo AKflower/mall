@@ -7,16 +7,28 @@ import Button from '../../components/button/button';
 import Input from '../../components/input/input';
 import Select2 from '../../components/select/select2';
 import galleryService from '../../services/galleriesService';
+import floorsService from '../../services/floorsService';
 // Đặt gốc cho Modal
 Modal.setAppElement('#root');
 
 export default function CinemaManage() {
+    const [floors, setFloors] = useState([
+        { id: 1, name: 'Floor 1' },
+        { id: 2, name: 'Floor 2' },
+        { id: 3, name: 'Floor 3' },
+        { id: 4, name: 'Floor 4' }
+    ]);
+    const [parkings,setParkings] = useState([])
+    
     const [formData, setFormData] = useState({
-        location: '',
+        floor:  1,
+        parking: null,
         name: '',
         file: null,
-        
+        description: '',
+        contactInfo: '',
     });
+    
     const handleChange = (e) => {
         
         const { name, value } = e.target;
@@ -28,6 +40,10 @@ export default function CinemaManage() {
             }));
            return;
         }
+        if (name=='floor') {
+            fetchParking(value);
+        }
+        
         setFormData((prevData) => ({
             ...prevData,
             [name]: value
@@ -46,7 +62,27 @@ export default function CinemaManage() {
         { id: 3, name: 'Floor 3' },
         { id: 4, name: 'Floor 4' },
     ];
-
+    const fetchParking = async (floorId) => {
+        try {
+            const data = await floorsService.getAvailableParkings(floorId);
+            var newData = [];
+            data.map((item) => {
+                var temp = {
+                    id: item,
+                    name: item
+                }
+                newData.push(temp);
+                
+            })
+            setFormData((prevData) => ({
+                ...prevData,
+                parking: newData[0].id
+            }));
+            setParkings(newData);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
     useEffect(() => {
         const fetchStalls = async () => {
             try {
@@ -58,6 +94,9 @@ export default function CinemaManage() {
                 setError(err.message);
             }
         };
+        
+
+        fetchParking(1);
 
         fetchStalls();
     }, []);
@@ -75,7 +114,17 @@ export default function CinemaManage() {
             try {
                 // Tải lên ảnh
                 const uploadedImage = await galleryService.uploadImage(formData.file[0]);
-                // stallService.createStall()
+                
+                var stall = {
+                    Name: formData.name,
+                    ImageId: uploadedImage.id,
+                    Description: formData.description,
+                    FloorId: parseInt(formData.floor),
+                    Parking: formData.parking,
+                    ContactInfo: formData.contactInfo,
+                    StallTypeId: 3
+                }
+                const res = await stallService.createStall(stall);
             }
             catch (err) {
                 console.error(err)
@@ -112,10 +161,11 @@ export default function CinemaManage() {
                 {stalls.map((stall) => (
                     <BrandItem
                         name={stall.name}
-                        location={stall.location}
+                        parking={stall.parking}
                         key={stall.stallId}
                         stallId={stall.stallId}
                         imageId={stall.imageId}
+                        isAdmin={true}
                     />
                 ))}
             </div>
@@ -130,6 +180,11 @@ export default function CinemaManage() {
                 
                 <Input label={'Name'} type={'text'} name={'name'} value={formData.name} onChange={handleChange} />
                 <Input label={'Image'} type='file' name={'file'}  onChange={handleChange}/>
+                <Input label={'Contact'} type={'text'} name={'contactInfo'} value={formData.contactInfo} onChange={handleChange} />
+
+                <Select2 label={'Floor'} value={formData.floor} options={floors} onChange={handleChange} name={'floor'}/>
+                <Select2 label={'Parking'} value={formData.parking} options={parkings} onChange={handleChange} name={'parking'}/>
+                <Input isTextArea={true} label={'Description'} value={formData.description} onChange={handleChange} name={'description'}/>
                     <div className={styles.btnContainer}>
                         
                         <Button name={'Cancel'} onClick={() => setShowModal(false)} color='red'/>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:5209/api/Products'; // Thay đổi URL nếu cần
+const API_URL = 'http://localhost:5209/api/Products'; // Thay đổi URL nếu cần
 
 const getProducts = async () => {
     try {

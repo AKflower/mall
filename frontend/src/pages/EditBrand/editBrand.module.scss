@@ -1,0 +1,201 @@
+// editBrand.module.scss
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 500px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    z-index: 1001;
+    overflow: auto;
+    div{
+        margin: 1em 0;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal h2 {
+    margin-top: 0;
+}
+
+.modal .form-group {
+    margin-bottom: 15px;
+}
+
+.modal .form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.modal .form-group input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.modal .btn-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal .btn-container button {
+    margin-left: 10px;
+}
+
+.btnContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1em;
+    margin: 2em 0 0 0;
+    div {
+        width: 5em;
+    }
+}
+.container{
+    padding: 1em 2em;
+    .title{
+        margin: 3em 0 1em 0;
+        text-align: center;
+        
+    }
+    h2{
+        margin: 1em 0 0 0;
+        
+    }
+    .contact{
+        gap: .5em;
+        padding: 1em 0;
+        color: rgb(109, 108, 108);
+        display: flex;
+        align-items: center;
+    }
+    .content{
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+      
+        .imgCover{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            img{
+                max-height: 15em;
+                border-radius: 10px;
+            }
+        }
+    }
+    .products{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        
+        .product{
+            .imgCover{
+                background-size: cover;
+                background-position: center;
+                width: 100%;
+                border: 1px solid silver;
+                border-radius: 1px;
+            }
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap:1em;
+            .content{
+                padding: 2em 1em;
+                display: flex;
+                flex-direction: column;
+                
+            }
+        }
+    }
+    .date{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap:1em;
+        .dateBox{
+            padding: 1em;
+           
+            background-color: #000;
+            color:white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .selectedDate {
+            padding: 1em;
+           
+            background-color: #2b2b2b;
+            color:rgb(198, 216, 80);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    }
+    .header {
+        display: flex;
+        gap:1em;
+        align-items: center;
+        &:hover .btnAdd{
+            display: flex;
+        }
+        .btnAdd{
+            display: none;
+            background-color: silver;
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+            
+            justify-content: center;
+            align-items:center;
+            cursor: pointer;
+        }
+   
+    }
+    .movies {
+        padding: 1em 0;
+        display: flex;
+        gap:1em;
+        flex-direction: column;
+        .movie {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap:1em;
+            
+            .img{
+                width: 100%;
+                height: 40em;
+                background-size: cover;
+                background-position: center;
+            }
+            .content{
+                display: flex;
+                flex-direction: column;
+                .showTimes{
+                    display: flex;
+                    flex-direction: row;
+                    gap:1em;
+                    .showTime{
+                        background-color: silver;
+                        padding: .5em 1em;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        &:hover{
+                            background-color: yellow;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

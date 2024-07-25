@@ -7,7 +7,7 @@ export default function Select2({label,name,onChange,value,options}) {
        
             <select name={name}  onChange={onChange} value={value} >
                 {options.map((option) => (
-                    <option value={option._id}>{option.name}</option>
+                    <option value={option.id}>{option.name}</option>
                 ))}
             </select> 
         </div>

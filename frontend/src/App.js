@@ -14,6 +14,7 @@ import CinemaManage from './pages/Cinema/cinemaManage';
 import FoodStall from './pages/FoodStall/foodStall';
 import Feedback from './pages/Feedback/feedback';
 import Gallery from './pages/Gallery/gallery';
+import EditBrand from './pages/EditBrand/editBrand';
 import Booking from './pages/Booking/booking';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
     <Route path='/admin/cinema' element={<CinemaManage />} />
     <Route path='/admin/feedback' element={<Feedback />} />
     <Route path='/admin/gallery' element={<Gallery />} />
+    <Route path='/admin/editBrand' element={<EditBrand />} />
     <Route path='/booking' element={<Booking />} />
     </Routes>
    

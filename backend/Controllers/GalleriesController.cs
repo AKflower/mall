@@ -97,10 +97,12 @@ public class GalleriesController : ControllerBase
         if (file == null || file.Length == 0)
             return BadRequest("No file uploaded.");
 
+        Galleries image;
+
         using (var memoryStream = new MemoryStream())
         {
             await file.CopyToAsync(memoryStream);
-            var image = new Galleries
+            image = new Galleries
             {
                 Name = file.FileName,
                 Data = memoryStream.ToArray()
@@ -110,7 +112,7 @@ public class GalleriesController : ControllerBase
             await _context.SaveChangesAsync();
         }
 
-        return Ok("File uploaded successfully.");
+        return Ok(new { id = image.ImageId });
     }
 
     [HttpGet("download/{id}")]
