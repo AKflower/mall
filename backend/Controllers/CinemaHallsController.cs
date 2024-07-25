@@ -91,6 +91,24 @@ public class CinemaHallsController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/CinemaHalls/stall/{stallId}
+    [HttpGet("stall/{stallId}")]
+    public async Task<ActionResult<IEnumerable<CinemaHalls>>> GetCinemaHallsByStallId(int stallId)
+    {
+        try
+        {
+            var cinemaHalls = await _context.CinemaHalls
+                .Where(ch => ch.StallId == stallId)
+                .ToListAsync();
+
+            return Ok(cinemaHalls);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Lỗi máy chủ: {ex.Message}");
+        }
+    }
+
     private bool CinemaHallExists(int id)
     {
         return _context.CinemaHalls.Any(e => e.CinemaHallId == id);
