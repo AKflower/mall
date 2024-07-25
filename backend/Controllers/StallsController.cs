@@ -41,7 +41,7 @@ public class StallsController : ControllerBase
         return Ok(stalls);
     }
 
-     // GET: api/Stalls/5
+    // GET: api/Stalls/5
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStall(int id)
     {
@@ -70,14 +70,20 @@ public class StallsController : ControllerBase
 
         return Ok(stall);
     }
-    // POST: api/Stalls
+    // POST: api/stalls
     [HttpPost]
-    public async Task<ActionResult<Stalls>> PostStall(Stalls Stall)
+    public async Task<IActionResult> AddStall([FromBody] Stalls newStall)
     {
-        _context.Stalls.Add(Stall);
+
+        var floor = await _context.Floors.FindAsync(newStall.FloorId);
+
+        _context.Stalls.Add(newStall);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetStall), new { id = Stall.StallId }, Stall);
+        floor.AvailableParkings -= 1;
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetStall), new { id = newStall.StallId }, newStall);
     }
 
     // PUT: api/Stalls/5
