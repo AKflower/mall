@@ -91,6 +91,25 @@ public class MoviesController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/Movies/stall/5
+    [HttpGet("stall/{stallId}")]
+    public async Task<ActionResult<IEnumerable<Movies>>> GetMoviesByStallId(int stallId)
+    {
+        try
+        {
+            var movies = await _context.Movies
+                .Where(movie => movie.StallId == stallId)
+                .ToListAsync();
+
+            return Ok(movies);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Lỗi máy chủ: {ex.Message}");
+        }
+    }
+
+
     private bool MovieExists(int id)
     {
         return _context.Movies.Any(e => e.MovieId == id);

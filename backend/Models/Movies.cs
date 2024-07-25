@@ -1,6 +1,7 @@
 public class Movies
 {
     public int MovieId { get; set; }
+    public int StallId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public int Duration { get; set; }
