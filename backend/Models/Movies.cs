@@ -7,6 +7,7 @@ public class Movies
     public int Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
     public int ImageId { get; set; }
+    public bool IsDelete { get; set; } = false;
 
     public Movies()
     {

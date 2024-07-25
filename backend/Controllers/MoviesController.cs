@@ -101,6 +101,7 @@ public class MoviesController : ControllerBase
                 .Where(movie => movie.StallId == stallId)
                 .ToListAsync();
 
+          
             return Ok(movies);
         }
         catch (Exception ex)
