@@ -117,19 +117,27 @@ public class StallsController : ControllerBase
     }
 
     // DELETE: api/Stalls/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteStall(int id)
+    [HttpDelete("{stallId}")]
+    public async Task<IActionResult> DeleteStall(int stallId)
     {
-        var Stall = await _context.Stalls.FindAsync(id);
-        if (Stall == null)
+        try
         {
-            return NotFound();
+            var stall = await _context.Stalls.FindAsync(stallId);
+
+            var products = _context.Products.Where(p => p.StallId == stallId).ToList();
+
+            _context.Products.RemoveRange(products);
+
+            _context.Stalls.Remove(stall);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(stallId);
         }
-
-        _context.Stalls.Remove(Stall);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
+        catch (Exception ex)
+        {
+            return Ok(0);
+        }
     }
 
     // GET: api/Stalls/TopPicks
