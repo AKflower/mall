@@ -163,31 +163,28 @@ public class ShowTimesController : ControllerBase
     {
         try
         {
-            // Đặt startDate vào đầu ngày và chuyển đổi sang UTC
             var startDate = date.Date.ToUniversalTime().AddHours(7);
 
             var endDate = startDate.AddDays(1);
 
-            // Lấy danh sách cinema halls theo stallId
             var cinemaHalls = _context.CinemaHalls
                 .Where(ch => ch.StallId == stallId)
                 .Select(ch => ch.CinemaHallId)
                 .ToList();
 
-            // Lấy danh sách showtimes theo ngày và cinema halls
             var showTimes = _context.ShowTimes
                 .Where(st => cinemaHalls.Contains(st.CinemaHallId) &&
                              st.StartTime >= startDate &&
                              st.StartTime < endDate)
                 .ToList();
 
-            // Lấy thông tin phim dựa trên MovieId từ ShowTimes
             var movieIds = showTimes.Select(st => st.MovieId).Distinct().ToList();
             var movies = _context.Movies
                 .Where(m => movieIds.Contains(m.MovieId))
                 .ToDictionary(m => m.MovieId, m => m);
 
-            // Tạo danh sách kết quả bao gồm thông tin phim và showtimes
+            var currentTimeUtc = DateTime.UtcNow;
+
             var result = movies.Select(m => new
             {
                 Movie = m.Value,
@@ -200,7 +197,8 @@ public class ShowTimesController : ControllerBase
                         StartTime = st.StartTime.ToUniversalTime(),
                         EndTime = st.EndTime.ToUniversalTime(),
                         st.AvailableSeats,
-                        st.Price
+                        st.Price,
+                        isDisabled = st.AvailableSeats == 0 || st.EndTime.ToUniversalTime() <= currentTimeUtc
                     }).ToList()
             }).ToList();
 
@@ -211,6 +209,7 @@ public class ShowTimesController : ControllerBase
             return StatusCode(500, "Lỗi server nội bộ: " + ex.Message);
         }
     }
+
 
     [HttpGet("compare-schedules")]
     public IActionResult CompareShowTimesWithSched(DateTime date, int movieId, int stallId, int cinemaHallId)
