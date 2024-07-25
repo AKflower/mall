@@ -106,7 +106,7 @@ public class MoviesController : ControllerBase
         try
         {
             var movies = await _context.Movies
-                .Where(movie => movie.StallId == stallId)
+                .Where(movie => movie.StallId == stallId && !movie.IsDelete)
                 .ToListAsync();
 
 
