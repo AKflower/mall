@@ -183,7 +183,7 @@ public class ShowTimesController : ControllerBase
                 .Where(m => movieIds.Contains(m.MovieId))
                 .ToDictionary(m => m.MovieId, m => m);
 
-            var currentTimeUtc = DateTime.UtcNow;
+            var currentTimeUtc = DateTime.UtcNow.AddHours(7);
 
             var result = movies.Select(m => new
             {
@@ -201,6 +201,8 @@ public class ShowTimesController : ControllerBase
                         isDisabled = st.AvailableSeats == 0 || st.EndTime.ToUniversalTime() <= currentTimeUtc
                     }).ToList()
             }).ToList();
+
+            Console.WriteLine(currentTimeUtc);
 
             return Ok(result);
         }
