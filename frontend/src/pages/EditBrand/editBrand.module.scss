@@ -199,3 +199,20 @@
         }
     }
 }
+.movieContainer{
+    
+    display:grid ;
+        grid-template-columns: repeat(2,1fr);
+        gap:1em;
+        padding: 1em;
+    .movie{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap:1em;
+        .poster{
+       
+            height: 20em;
+            background-size: cover;
+        }
+    }
+}

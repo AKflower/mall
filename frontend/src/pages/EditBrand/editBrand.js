@@ -11,6 +11,10 @@ import Button from '../../components/button/button';
 import Modal from 'react-modal';
 import productService from '../../services/productService';
 import AddIcon from '@mui/icons-material/Add';
+import moviesService from '../../services/moviesService';
+import Ptitle from '../../components/ptitle/ptitle';
+import galleryService from '../../services/galleriesService';
+
 
 Modal.setAppElement('#root'); // Thiết lập phần tử gốc cho modal
 
@@ -23,7 +27,12 @@ export default function EditBrand() {
     const [showProductModal, setShowProductModal] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [productUpdate, setProductUpdate] = useState({});
-
+    const [movies,setMovies] = useState([])
+    const [newMovie, setNewMovie] = useState({ title: '', duration: '', imageId: '' }); // New movie state
+    const [editMovie, setEditMovie] = useState(null); 
+    const [showAddMovieModal, setShowAddMovieModal] = useState(false); // New state for Add Movie modal
+    const [showEditMovieModal, setShowEditMovieModal] = useState(false);
+    const [newImage,setNewImage] = useState(null)
     const useQuery = () => {
         return new URLSearchParams(location.search);
     };
@@ -59,6 +68,11 @@ export default function EditBrand() {
             data.descriptionUpdate = data.description;
             data.description = descriptionArray;
             setStall(data);
+            if (data.stallTypeId==3) {
+                const movieData = await moviesService.getMoviesByStallId(data.stallId);
+                console.log(movieData.data);
+                setMovies(movieData.data)
+            }
         } catch (err) {
             console.error(err.message);
         }
@@ -101,6 +115,15 @@ export default function EditBrand() {
     const handleEditClick = () => {
         setShowModal(true);
     };
+    const handleOpenAddMovieModal = () => {
+        setNewMovie({ title: '', duration: '', imageId: '' });
+        setShowAddMovieModal(true);
+    };
+
+    const handleOpenEditMovieModal = (movie) => {
+        setEditMovie(movie);
+        setShowEditMovieModal(true);
+    };
 
     const handleEditProductClick = (product) => {
         setSelectedProduct(product);
@@ -114,6 +137,13 @@ export default function EditBrand() {
 
     const handleCloseProductModal = () => {
         setShowProductModal(false);
+    };
+    const handleCloseAddMovieModal = () => {
+        setShowAddMovieModal(false);
+    };
+
+    const handleCloseEditMovieModal = () => {
+        setShowEditMovieModal(false);
     };
 
     const handleUpdate = async () => {
@@ -136,8 +166,33 @@ export default function EditBrand() {
             console.error(err);
         }
     };
+    const handleAddMovie = async () => {
+        try {
+            const uploadedImage = await galleryService.uploadImage(newImage[0]);
+            newMovie.imageId=uploadedImage.id;
+            newMovie.stallId=id;
+            await moviesService.createMovie(newMovie);
+            fetchStall();
+            handleCloseAddMovieModal();
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-    if (!stall) return null;
+    const handleUpdateMovie = async () => {
+        try {
+            await moviesService.updateMovie(editMovie.movieId, editMovie);
+            fetchStall();
+            handleCloseEditMovieModal();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    const handleDeleteMovie = async (movie) => {
+
+        await moviesService.updateMovie(movie.movieId,{...movie,isDelete:true})
+    }
+    if (!stall || stall && stall.stallTypeId==3 && movies.length==0) return null;
 
     return (
         <div className={'main ' + styles.container}>
@@ -174,11 +229,26 @@ export default function EditBrand() {
                 ))}
             </div>}
             {stall.stallTypeId == 3 && 
-                <div className={styles.header}><h3>Movies</h3><span className={styles.btnAdd}><AddIcon /></span></div>
+                <div className={styles.header}><h3>Movies</h3><span className={styles.btnAdd} onClick={handleOpenAddMovieModal}><AddIcon /></span></div>
             }
-            {stall.stallTypeId == 3 &&
-                <div>Test</div>
-                }
+            <div className={styles.movieContainer}>
+            
+            { movies.map((movie) => (
+                <div className={styles.movie}>
+                    <div className={styles.posterCover}><div className={styles.poster} style={{ backgroundImage: `url(http://localhost:5209/api/Galleries/download/${movie.imageId})` }}></div></div>
+                    <div className={styles.infor}>
+                        <h3>{movie.title}</h3>
+                        <Ptitle title={'Duration'} content={movie.duration + ' minutes'}/>
+                        <div className={styles.btnContainer} style={{float:'left'}}>
+                            <Button name={'Delete'} onClick={() => handleDeleteMovie(movie)} color='red' />
+                            <Button name="Edit" onClick={() => handleOpenEditMovieModal(movie)} />
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+            </div>
+             
             <div className={styles.schedule}>
                 {showTimes.map((time) => (
                     <div className={styles.scheduleItem} key={time.movieId}>
@@ -204,7 +274,7 @@ export default function EditBrand() {
                 <Input label="Description" value={stallUpDate.descriptionUpdate} onChange={(e) => setStallUpdate({ ...stallUpDate, descriptionUpdate: e.target.value })} isTextArea />
                 <div className={styles.btnContainer}>
                     <Button name={'Cancel'} onClick={handleCloseModal} color='red' />
-                    <Button name="Save" onClick={handleUpdate} />
+                    <Button name="Save" onClick={() => handleUpdate} />
                 </div>
             </Modal>
             {/* Modal for editing product */}
@@ -224,6 +294,73 @@ export default function EditBrand() {
                     <Button name="Save" onClick={handleUpdateProduct} />
                 </div>
             </Modal>
+            {/* Add Movie Modal */}
+            <Modal
+                isOpen={showAddMovieModal}
+                onRequestClose={handleCloseAddMovieModal}
+                className={styles.modal}
+                overlayClassName={styles.overlay}
+            >
+                <h2>Add New Movie</h2>
+                <Input
+                    label="Title"
+                    value={newMovie.title}
+                    onChange={(e) => setNewMovie({ ...newMovie, title: e.target.value })}
+                />
+                <Input
+                    label="Duration (minutes)"
+                    value={newMovie.duration}
+                    onChange={(e) => setNewMovie({ ...newMovie, duration: e.target.value })}
+                />
+                <Input 
+                    label={'Description'}
+                    value={newMovie.description}
+                    onChange={(e) => setNewMovie({...newMovie, description: e.target.value})}
+                    isTextArea={true}
+                />
+                <Input label={'Image'} type='file' name={'file'}  onChange={(e) => setNewImage(e.target.files)}/>
+
+               <div className={styles.btnContainer}>
+                <Button name="Add Movie" onClick={handleAddMovie} />
+                <Button name="Cancel" color='gray' onClick={handleCloseAddMovieModal} />
+               </div>
+                
+            </Modal>
+            {/* Edit Movie Modal */}
+            <Modal
+                isOpen={showEditMovieModal}
+                onRequestClose={handleCloseEditMovieModal}
+                className={styles.modal}
+                overlayClassName={styles.overlay}
+            >
+                <h2>Edit Movie</h2>
+                {editMovie && (
+                    <>
+                        <Input
+                            label="Title"
+                            value={editMovie.title}
+                            onChange={(e) => setEditMovie({ ...editMovie, title: e.target.value })}
+                        />
+                        <Input
+                            label="Duration (minutes)"
+                            value={editMovie.duration}
+                            onChange={(e) => setEditMovie({ ...editMovie, duration: e.target.value })}
+                        />
+                       <Input 
+                            label={'Description'}
+                            value={editMovie.description}
+                            onChange={(e) => setEditMovie({...editMovie, description: e.target.value})}
+                            isTextArea={true}
+                       />
+                        <div className={styles.btnContainer}>
+                             <Button name="Update" onClick={handleUpdateMovie} />
+                        <Button name="Cancel" color='gray' onClick={handleCloseEditMovieModal} />
+                
+                        </div>
+                        </> 
+                )}
+            </Modal>
+            
         </div>
     );
 }

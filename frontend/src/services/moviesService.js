@@ -19,7 +19,9 @@ const getMovie = async (id) => {
         throw new Error(`Failed to fetch movie with id ${id}.`);
     }
 };
-
+const getMoviesByStallId = (stallId) => {
+    return axios.get(`${API_URL}/stall/${stallId}`);
+};
 const createMovie = async (movie) => {
     try {
         const response = await axios.post(API_URL, movie);
@@ -51,6 +53,7 @@ const moviesService = {
     createMovie,
     updateMovie,
     deleteMovie,
+    getMoviesByStallId
 };
 
 export default moviesService;
