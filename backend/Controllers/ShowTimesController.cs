@@ -68,35 +68,46 @@ public class ShowTimesController : ControllerBase
         return Ok(result);
     }
 
-
     // POST: api/ShowTimes
     [HttpPost]
-    public async Task<ActionResult<ShowTimes>> PostShowTime(ShowTimes ShowTime)
+    public async Task<ActionResult<ShowTimes>> PostShowTime(ShowTimes showTime)
     {
-        var cinemaHall = await _context.CinemaHalls.FindAsync(ShowTime.CinemaHallId);
-
-        if (cinemaHall == null)
-        {
-            return NotFound("Không tìm thấy phòng chiếu.");
-        }
-
-        ShowTime.AvailableSeats = cinemaHall.TotalSeats;
-
-        var movie = await _context.Movies.FindAsync(ShowTime.MovieId);
-
+        var movie = await _context.Movies.FindAsync(showTime.MovieId);
         if (movie == null)
         {
             return NotFound("Không tìm thấy phim.");
         }
 
         var ts = new TimeSpan(0, movie.Duration, 0);
-        ShowTime.EndTime = ShowTime.StartTime.Add(ts);
+        showTime.EndTime = showTime.StartTime.Add(ts);
 
-        _context.ShowTimes.Add(ShowTime);
+        var overlappingShowTime = await _context.ShowTimes
+            .Where(st => st.CinemaHallId == showTime.CinemaHallId &&
+                         ((showTime.StartTime >= st.StartTime && showTime.StartTime < st.EndTime) ||
+                          (showTime.EndTime > st.StartTime && showTime.EndTime <= st.EndTime) ||
+                          (showTime.StartTime <= st.StartTime && showTime.EndTime >= st.EndTime)))
+            .FirstOrDefaultAsync();
+
+        if (overlappingShowTime != null)
+        {
+            return Conflict("Thời gian chiếu trùng lặp với showtime khác trong cùng rạp.");
+        }
+
+        var cinemaHall = await _context.CinemaHalls.FindAsync(showTime.CinemaHallId);
+
+        if (cinemaHall == null)
+        {
+            return NotFound("Không tìm thấy phòng chiếu.");
+        }
+
+        showTime.AvailableSeats = cinemaHall.TotalSeats;
+
+        _context.ShowTimes.Add(showTime);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetShowTime), new { id = ShowTime.ShowTimeId }, ShowTime);
+        return CreatedAtAction(nameof(GetShowTime), new { id = showTime.ShowTimeId }, showTime);
     }
+
 
     // PUT: api/ShowTimes/5
     [HttpPut("{id}")]
