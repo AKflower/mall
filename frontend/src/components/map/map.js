@@ -11,6 +11,7 @@ export default function MapMall () {
     const [floorPick,setFloorPick] = useState(1)
     return (
         <div className={styles.container}>
+            <h1 style={{textAlign:'center'}}>Map</h1>
             <div className={styles.tabHeader}>
                 {floors.map((floor) => (
                     <div className={floor.id==floorPick ? styles.tabActive :  styles.tab } onClick={()=> setFloorPick(floor.id)} >
