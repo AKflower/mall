@@ -14,13 +14,16 @@ import BrunchDiningIcon from '@mui/icons-material/BrunchDining';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import ForumIcon from '@mui/icons-material/Forum';
 import CollectionsIcon from '@mui/icons-material/Collections';
+import {useNavigate} from 'react-router-dom'
 
 export default function Sidebar () {
-    const role = localStorage.getItem('role')
+    const navigate= useNavigate()
+    const token = localStorage.getItem('token')
     const path = useLocation().pathname;
     
+    if (!token && path!='/admin') navigate('/admin'); 
     return (
-        <div className={ styles.container} style={{display:path.includes('/admin')  ?  'block' : 'none'}}>
+        <div className={ styles.container} style={{display:(path.includes('/admin') && path!='/admin' )?  'block' : 'none'}}>
             <div style={{margin: '0 0 2em 2em',fontWeight:'700'}}>ABCD MALL</div>
             
             <Link to='/admin/dashboard'>

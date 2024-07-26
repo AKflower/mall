@@ -7,7 +7,7 @@ const getShowTimes = async () => {
         const response = await axios.get(API_URL);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch showtimes.');
+        throw new Error('Failed to fetch show times.');
     }
 };
 
@@ -16,7 +16,7 @@ const getShowTime = async (id) => {
         const response = await axios.get(`${API_URL}/${id}`);
         return response.data;
     } catch (error) {
-        throw new Error(`Failed to fetch showtime with id ${id}.`);
+        throw new Error(`Failed to fetch show time with id ${id}.`);
     }
 };
 
@@ -25,7 +25,7 @@ const createShowTime = async (showTime) => {
         const response = await axios.post(API_URL, showTime);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to create showtime.');
+        throw new Error('Failed to create show time.');
     }
 };
 
@@ -33,7 +33,7 @@ const updateShowTime = async (id, showTime) => {
     try {
         await axios.put(`${API_URL}/${id}`, showTime);
     } catch (error) {
-        throw new Error(`Failed to update showtime with id ${id}.`);
+        throw new Error(`Failed to update show time with id ${id}.`);
     }
 };
 
@@ -41,7 +41,7 @@ const deleteShowTime = async (id) => {
     try {
         await axios.delete(`${API_URL}/${id}`);
     } catch (error) {
-        throw new Error(`Failed to delete showtime with id ${id}.`);
+        throw new Error(`Failed to delete show time with id ${id}.`);
     }
 };
 
@@ -52,18 +52,7 @@ const getShowTimesByDate = async (date) => {
         });
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch showtimes by date.');
-    }
-};
-
-const getShowTimesByDateAndCinemaHall = async (date, cinemaHallId) => {
-    try {
-        const response = await axios.get(`${API_URL}/by-date`, {
-            params: { date, cinemaHallId }
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error('Failed to fetch showtimes by date and cinema hall.');
+        throw new Error('Failed to fetch show times by date.');
     }
 };
 
@@ -74,19 +63,30 @@ const getMoviesAndShowTimesByDateAndStall = async (date, stallId) => {
         });
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch movies and showtimes by date and stall.');
+        throw new Error('Failed to fetch movies and show times by date and stall.');
     }
 };
 
-const showTimeService = {
+const compareShowTimesWithSched = async (date, movieId, stallId, cinemaHallId) => {
+    try {
+        const response = await axios.get(`${API_URL}/compare-schedules`, {
+            params: { date, movieId, stallId, cinemaHallId }
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to compare show times with schedules.');
+    }
+};
+
+const showTimesService = {
     getShowTimes,
     getShowTime,
     createShowTime,
     updateShowTime,
     deleteShowTime,
     getShowTimesByDate,
-    getShowTimesByDateAndCinemaHall,
     getMoviesAndShowTimesByDateAndStall,
+    compareShowTimesWithSched
 };
 
-export default showTimeService;
+export default showTimesService;
