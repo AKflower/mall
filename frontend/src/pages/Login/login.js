@@ -30,6 +30,9 @@ export default function Login () {
         setIsLoading(true);
         try {
             const response = await authService.login(formData.Email,formData.Password);
+             localStorage.setItem('token',response.token)
+            if (response.token) navigate('/admin/shop')
+           
         }
         catch(err) {
 

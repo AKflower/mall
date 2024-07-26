@@ -10,7 +10,7 @@ import EventSeatIcon from '@mui/icons-material/EventSeat';
 export default function BrandDetail() {
     const navigate = useNavigate()
     const [stall, setStall] = useState(null)
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-CA'));
     const useQuery = () => {
         return new URLSearchParams(location.search);
     };
@@ -55,17 +55,17 @@ export default function BrandDetail() {
     }, [selectedDate, id]);
 
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const today = new Date();
 
     const getFormattedDate = (date) => {
         const day = date.getDate();
         const month = date.getMonth() + 1; // Months are zero-based
         const year = date.getFullYear();
         const dayOfWeek = daysOfWeek[date.getDay()];
-        return `${dayOfWeek}, ${day}/${month}/${year}`;
+        return `${dayOfWeek}, ${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
     };
-
+    const today = new Date();
     const todayFormatted = getFormattedDate(today);
+
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
     const tomorrowFormatted = getFormattedDate(tomorrow);
@@ -73,6 +73,11 @@ export default function BrandDetail() {
     const dayAfterTomorrow = new Date(today);
     dayAfterTomorrow.setDate(today.getDate() + 2);
     const dayAfterTomorrowFormatted = getFormattedDate(dayAfterTomorrow);
+
+    // Đổi sang định dạng 'YYYY-MM-DD' cho selectedDate
+    const formatDateForApi = (date) => {
+        return date.toLocaleDateString('en-CA'); // 'en-CA' cho định dạng YYYY-MM-DD
+    };
 
     if (!stall) return;
     return (
@@ -101,27 +106,26 @@ export default function BrandDetail() {
                             <p>{product.description}</p>
                         </div>
                     </div>
-
                 ))}
             </div>
             }
             {stall.stallTypeId == 3 && <h3>Movies</h3>}
             {stall.stallTypeId == 3 &&
                 <div className={styles.date}>
-                    <div className={`${styles.dateBox} ${selectedDate === today.toISOString().split('T')[0] ? styles.selectedDate : ''}`} onClick={() => setSelectedDate(today.toISOString().split('T')[0])}>
+                    <div className={`${styles.dateBox} ${selectedDate === formatDateForApi(today) ? styles.selectedDate : ''}`} onClick={() => setSelectedDate(formatDateForApi(today))}>
                         <p>{todayFormatted}</p>
                     </div>
-                    <div className={`${styles.dateBox} ${selectedDate === tomorrow.toISOString().split('T')[0] ? styles.selectedDate : ''}`} onClick={() => setSelectedDate(tomorrow.toISOString().split('T')[0])}>
+                    <div className={`${styles.dateBox} ${selectedDate === formatDateForApi(tomorrow) ? styles.selectedDate : ''}`} onClick={() => setSelectedDate(formatDateForApi(tomorrow))}>
                         <p>{tomorrowFormatted}</p>
                     </div>
-                    <div className={`${styles.dateBox} ${selectedDate === dayAfterTomorrow.toISOString().split('T')[0] ? styles.selectedDate : ''}`} onClick={() => setSelectedDate(dayAfterTomorrow.toISOString().split('T')[0])}>
+                    <div className={`${styles.dateBox} ${selectedDate === formatDateForApi(dayAfterTomorrow) ? styles.selectedDate : ''}`} onClick={() => setSelectedDate(formatDateForApi(dayAfterTomorrow))}>
                         <p>{dayAfterTomorrowFormatted}</p>
                     </div>
                 </div>
             }
             {stall.stallTypeId == 3 && <div className={styles.movies}>
                 {showTimes.map((showTime) => (
-                    <div className={styles.movie} key={showTime.movie.movieId}>
+                    !showTime.isDisabled && <div className={styles.movie} key={showTime.movie.movieId}>
                         <div className={styles.img} style={{ backgroundImage: `url(http://localhost:5209/api/Galleries/download/${showTime.movie.imageId})` }}></div>
                         <div className={styles.content}>
                             <h1>{showTime.movie.title}</h1>
@@ -132,7 +136,6 @@ export default function BrandDetail() {
                                 ))}
                                 {showTime.length == 0 && <h2>There are no showtimes yet!</h2>}
                             </div>
-
                         </div>
                     </div>
                 ))}

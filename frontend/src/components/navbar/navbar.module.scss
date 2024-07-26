@@ -1,6 +1,6 @@
 .container{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     color: white;
     background-color: black;
     width: 100%;
@@ -11,19 +11,29 @@
     z-index: 1000;
     top:0;
     left: 0;
-    a{
-        text-decoration: none;
-        color: white;
+    .logo{
+        h4{
+            margin: 0 1em;
+        }
     }
-    .tabActive{
-        opacity: 1 !important;
-        margin-right: 1em;
-        color: rgb(174, 174, 14);
-        font-weight: 600;
+    .tabContainer{
+        display: flex;
+        justify-content: flex-end;
+        a{
+            text-decoration: none;
+            color: white;
+        }
+        .tabActive{
+            opacity: 1 !important;
+            margin-right: 1em;
+            color: rgb(174, 174, 14);
+            font-weight: 600;
+        }
+        .tab{
+            opacity: 1 !important;
+            margin-right: 1em;
+        }
     }
-    .tab{
-        opacity: 1 !important;
-        margin-right: 1em;
-    }
+   
 
 }

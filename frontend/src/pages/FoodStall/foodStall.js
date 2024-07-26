@@ -162,6 +162,7 @@ export default function FoodStall () {
                         key={stall.stallId}
                         stallId={stall.stallId}
                         imageId={stall.imageId}
+                        isAdmin={true}
                     />
                 ))}
             </div>

@@ -194,7 +194,7 @@ export default function Booking() {
                 overlayClassName={styles.overlay}
             >
                 <h2>Payment</h2>
-
+                <Ptitle title={'Total price'} content={seatsBooking.length*showTime.price}/>
                 <Input label={'Name'} type={'text'} name={'name'} value={formData.name} onChange={handleChange} />
                 <Input label={'Phone'} type={'numeric'} name={'phone'} value={formData.phone} onChange={handleChange} />
                 <Input label={'Email'} type={'email'} name={'email'} value={formData.email} onChange={handleChange} />

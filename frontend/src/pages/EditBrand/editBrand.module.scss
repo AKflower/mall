@@ -240,3 +240,22 @@
         
     }
 }
+.cinemaHallContainer{
+    display: flex;
+    gap: 1em;
+    .cinemaHall{
+        background-color: silver;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: .5em 1em;
+        &:hover {
+            background-color: rgb(9, 84, 84);
+            color: white;
+        }
+    }
+}
+.film{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap:1em;
+}

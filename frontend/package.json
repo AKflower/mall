@@ -14,10 +14,12 @@
     "ajv": "^8.17.1",
     "axios": "^1.7.2",
     "react": "^18.3.1",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
+    "react-time-picker": "^7.0.0",
     "sass": "^1.77.8",
     "web-vitals": "^2.1.4"
   },

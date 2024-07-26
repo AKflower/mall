@@ -1,0 +1,37 @@
+.container{
+    padding-bottom: 1em;
+    .tabHeader{
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+        gap:1em;
+        padding: 1em;
+        .tab{
+            padding: 1em;
+            text-align: center;
+            cursor: pointer;
+        }
+        .tabActive{
+            padding: 1em;
+            border-bottom: 1px solid;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+
+    }
+    .mapContainer{
+        display: flex;
+        justify-content: center;
+    }
+    .map1{
+        background-image: url('../../assets/images/Floor1.jpg');
+    }
+    .map2 {
+        background-image: url('../../assets/images/Floor2.jpg');
+    }
+    .map3 {
+        background-image: url('../../assets/images/Floor3.jpg');
+    }
+    
+}
