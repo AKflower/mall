@@ -27,10 +27,10 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<FeedBacks>()
             .HasKey(a => a.FeedBackId);
-        
+
         modelBuilder.Entity<Galleries>()
             .HasKey(a => a.ImageId);
-            
+
         modelBuilder.Entity<Galleries>()
             .Property(g => g.UploadedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -58,34 +58,67 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<Floors>()
             .HasKey(a => a.FloorId);
-    //     modelBuilder.Entity<FoodItem>()
-    //         .HasOne(f => f.Stall)
-    //         .WithMany()
-    //         .HasForeignKey(f => f.StallId);
 
-    //     modelBuilder.Entity<Feedback>()
-    //         .HasOne(f => f.User)
-    //         .WithMany()
-    //         .HasForeignKey(f => f.UserId);
+        modelBuilder.Entity<ShowTimes>()
+                .HasOne(st => st.Movie)
+                .WithMany(m => m.ShowTimes)
+                .HasForeignKey(st => st.MovieId);
 
-    //     modelBuilder.Entity<TheaterSeat>()
-    //         .HasOne(ts => ts.Movie)
-    //         .WithMany()
-    //         .HasForeignKey(ts => ts.MovieId);
+        modelBuilder.Entity<ShowTimes>()
+            .HasOne(st => st.CinemaHall)
+            .WithMany(ch => ch.ShowTimes)
+            .HasForeignKey(st => st.CinemaHallId);
 
-    //     modelBuilder.Entity<Booking>()
-    //         .HasOne(b => b.User)
-    //         .WithMany()
-    //         .HasForeignKey(b => b.UserId);
+        modelBuilder.Entity<CinemaHalls>()
+            .HasOne(st => st.Stall)
+            .WithMany(ch => ch.CinemaHalls)
+            .HasForeignKey(st => st.StallId);
 
-    //     modelBuilder.Entity<Booking>()
-    //         .HasOne(b => b.Movie)
-    //         .WithMany()
-    //         .HasForeignKey(b => b.MovieId);
+        modelBuilder.Entity<Movies>()
+            .HasOne(st => st.Stall)
+            .WithMany(ch => ch.Movies)
+            .HasForeignKey(st => st.StallId);
 
-    //     modelBuilder.Entity<Booking>()
-    //         .HasOne(b => b.Seat)
-    //         .WithMany()
-    //         .HasForeignKey(b => b.SeatId);
+        modelBuilder.Entity<Movies>()
+            .HasOne(st => st.Gallery)
+            .WithMany(ch => ch.Movies)
+            .HasForeignKey(st => st.ImageId);
+
+        modelBuilder.Entity<Products>()
+            .HasOne(st => st.Stall)
+            .WithMany(ch => ch.Products)
+            .HasForeignKey(st => st.StallId);
+
+        modelBuilder.Entity<Products>()
+            .HasOne(st => st.Gallery)
+            .WithMany(ch => ch.Products)
+            .HasForeignKey(st => st.ImageId); 
+
+        modelBuilder.Entity<Products>()
+            .HasOne(st => st.ProductType)
+            .WithMany(ch => ch.Products)
+            .HasForeignKey(st => st.ProductTypeId); 
+
+        modelBuilder.Entity<Stalls>()
+            .HasOne(st => st.Floor)
+            .WithMany(ch => ch.Stalls)
+            .HasForeignKey(st => st.FloorId);
+
+        modelBuilder.Entity<Stalls>()
+            .HasOne(st => st.Gallery)
+            .WithMany(ch => ch.Stalls)
+            .HasForeignKey(st => st.ImageId); 
+
+        modelBuilder.Entity<Stalls>()
+            .HasOne(st => st.StallType)
+            .WithMany(ch => ch.Stalls)
+            .HasForeignKey(st => st.StallTypeId); 
+
+        modelBuilder.Entity<Tickets>()
+            .HasOne(st => st.ShowTime)
+            .WithMany(ch => ch.Tickets)
+            .HasForeignKey(st => st.ShowTimeId); 
+
+        base.OnModelCreating(modelBuilder);
     }
 }

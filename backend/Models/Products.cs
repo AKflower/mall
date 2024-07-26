@@ -2,9 +2,12 @@ public class Products
 {
     public int ProductId { get; set; }
     public int StallId { get; set; }
+    public Stalls Stall { get; set; } 
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
     public int ProductTypeId { get; set; }
+    public ProductTypes ProductType { get; set; }
     public int ImageId { get; set; }
+    public Galleries Gallery { get; set; }
 }
