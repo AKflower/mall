@@ -2,6 +2,7 @@ public class Tickets
 {
     public int TicketId { get; set; }
     public int ShowTimeId { get; set; }
+    public ShowTimes ShowTime { get; set; }
     public DateTime BookingTime { get; set; }
     public int SeatNumber { get; set; }
     public string Credit { get; set; }
@@ -10,7 +11,7 @@ public class Tickets
     public string? SeatName { get; set; }
     public string? Phone { get; set; }
     public decimal TotalPrice { get; set; }
-     public Tickets()
+    public Tickets()
     {
         BookingTime = DateTime.UtcNow.AddHours(7);
     }
