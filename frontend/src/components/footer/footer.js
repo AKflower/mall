@@ -5,6 +5,7 @@ import Button2 from '../button/button2'
 import React, { useEffect, useState } from 'react';
 import feedbackService from '../../services/feedbackService';
 
+
 export default function Footer() {
     const [feedback, setFeedback] = useState('');
    
